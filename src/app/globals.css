@@ -1,0 +1,225 @@
+@import "tailwindcss";
+
+:root {
+  /* =========================================================================
+     GIMMY COOK — OFFICIAL BRAND IDENTITY PALETTE (GOOD FOOD • GOOD MOOD)
+     ========================================================================= */
+  --brand-navy: #0B2D5C;
+  --brand-deep-blue: #143A73;
+  --brand-dark-navy: #071D3B;
+  --brand-orange: #FF6A00;
+  --brand-orange-dark: #CE2F08;
+  --brand-yellow: #FFC145;
+
+  --color-ink: #071D3B;
+  --color-white: #FFFFFF;
+  --color-cream: #FFF5E8;
+  --color-beige: #F3E3D1;
+  --color-border: #E5D6C5;
+
+  --color-background: #FFF5E8;
+  --color-surface: #FFFFFF;
+
+  --container-7xl: 100%;
+  --container-6xl: 100%;
+}
+
+@theme inline {
+  --color-brand: #FF6A00;
+  --color-brand-600: #E55D00;
+  --color-brand-700: #CE2F08;
+  --color-brand-50: #FFF5E8;
+  --color-navy: #0B2D5C;
+  --color-teal: #0B2D5C;
+  --color-teal-50: #FFF5E8;
+  --color-cyan: #FFC145;
+  --color-cream: #FFF5E8;
+  --color-cream-200: #F3E3D1;
+  --color-honey: #FFC145;
+  --color-berry: #FF6A00;
+  --color-leaf: #0B2D5C;
+  --color-plum: #143A73;
+  --color-ink: #071D3B;
+  --color-cocoa: #071D3B;
+  --font-sans: var(--font-tajawal), system-ui, sans-serif;
+  --font-display: var(--font-alexandria), var(--font-tajawal), system-ui, sans-serif;
+  --font-en: var(--font-poppins), var(--font-tajawal), system-ui, sans-serif;
+}
+
+.max-w-7xl,
+.max-w-6xl {
+  max-width: 100% !important;
+}
+@media (min-width: 1024px) {
+  .max-w-7xl,
+  .max-w-6xl {
+    padding-inline: 2.5rem !important;
+  }
+}
+
+html {
+  scrollbar-width: none;
+  overflow-x: clip;
+  max-width: 100vw;
+}
+html::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  overflow-x: clip;
+  max-width: 100vw;
+  width: 100%;
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-tajawal), system-ui, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+h1,
+h2,
+.font-display {
+  font-family: var(--font-alexandria), var(--font-tajawal), system-ui, sans-serif;
+}
+
+.font-en {
+  font-family: var(--font-poppins), var(--font-tajawal), sans-serif;
+  letter-spacing: 0.02em;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+/* No-scrollbar utility for horizontal snap carousels */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Subtle Brand Dot Matrix Texture (Matches Brand Sheet Graphic Elements) */
+.bg-brand-dots {
+  background-image: radial-gradient(rgba(255, 106, 0, 0.16) 1.25px, transparent 1.25px);
+  background-size: 16px 16px;
+}
+
+/* Unified Strict-Palette Button System (Zero Off-Brand Colors) */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 800;
+  transition: transform 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease,
+    color 0.15s ease, border-color 0.15s ease;
+  cursor: pointer;
+}
+.btn:active {
+  transform: scale(0.97);
+}
+.btn-primary {
+  background: var(--brand-orange);
+  color: var(--color-white);
+  box-shadow: 0 12px 26px -8px rgb(255 106 0 / 0.45);
+}
+.btn-primary:hover {
+  background: var(--brand-orange-dark);
+}
+.btn-secondary {
+  background: var(--brand-navy);
+  color: var(--color-white);
+  box-shadow: 0 10px 24px -8px rgb(11 45 92 / 0.36);
+}
+.btn-secondary:hover {
+  background: var(--brand-deep-blue);
+}
+.btn-teal {
+  background: var(--brand-navy);
+  color: var(--color-white);
+}
+.btn-teal:hover {
+  background: var(--brand-deep-blue);
+}
+.btn-outline {
+  border: 2px solid var(--brand-navy);
+  color: var(--brand-navy);
+  background: var(--color-white);
+}
+.btn-outline:hover {
+  background: var(--brand-navy);
+  color: var(--color-white);
+}
+.btn-whatsapp {
+  background: var(--brand-navy);
+  color: var(--brand-yellow);
+  border: 1.5px solid rgba(255, 193, 69, 0.45);
+}
+.btn-whatsapp:hover {
+  background: var(--brand-orange);
+  color: var(--color-white);
+  border-color: var(--brand-orange);
+}
+
+.sticker-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+  background: var(--brand-yellow);
+  color: var(--brand-navy);
+  font-weight: 900;
+  font-size: 0.74rem;
+  line-height: 1.2;
+  padding: 0.32rem 0.9rem;
+  border-radius: 9999px;
+  transform: rotate(-4deg);
+  box-shadow: 0 6px 14px -6px rgba(7, 29, 59, 0.25);
+}
+
+.card {
+  background: var(--color-white);
+  border-radius: 1.5rem;
+  border: 1.5px solid var(--color-border);
+  box-shadow: 0 2px 8px rgb(7 29 59 / 0.04), 0 12px 28px -16px rgb(11 45 92 / 0.1);
+}
+
+.label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--brand-navy);
+  margin-bottom: 0.35rem;
+}
+
+.input {
+  width: 100%;
+  border: 1.5px solid var(--color-border);
+  background: var(--color-white);
+  border-radius: 0.875rem;
+  padding: 0.7rem 0.9rem;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+.input:focus {
+  border-color: var(--brand-orange);
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0.8);
+  }
+  60% {
+    transform: scale(1.14);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.animate-pop {
+  animation: pop 0.28s ease-out;
+}
