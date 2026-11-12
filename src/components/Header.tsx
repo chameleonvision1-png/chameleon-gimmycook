@@ -10,21 +10,16 @@ import { formatPrice } from "@/lib/format";
 import {
   CartIcon,
   CheckIcon,
-  ChevronDownIcon,
   CloseIcon,
   DownloadAppIcon,
   FacebookIcon,
-  GiftPointsIcon,
   InstagramIcon,
   MailIcon,
   MenuIcon,
   PhoneIcon,
-  PinIcon,
   QrCodeIcon,
   ShareIosIcon,
   TikTokIcon,
-  Truck24Icon,
-  UtensilsIcon,
   WhatsAppIcon,
 } from "./icons";
 import MenuQrModal from "./MenuQrModal";
@@ -44,34 +39,31 @@ const TOP_NAV = [
   { href: "/", label: "الرئيسية" },
   { href: "/menu", label: "المنيو" },
   { href: "/offers", label: "العروض" },
-  { href: "/points", label: "نقاط جيمي" },
   { href: "/delivery", label: "التوصيل 24 ساعة" },
+  { href: "/occasions", label: "العزومات" },
   { href: "/contact", label: "تواصل معنا" },
 ];
 
-const SITE_PAGES = [
-  { href: "/", label: "الصفحة الرئيسية" },
-  { href: "/offers", label: "العروض والبوكسات" },
-  { href: "/points", label: "نقاط GIMMY POINTS" },
-  { href: "/delivery", label: "مناطق التوصيل 24 ساعة" },
-  { href: "/occasions", label: "العزومات والشركات" },
-  { href: "/branches", label: "الفرع والخريطة" },
-  { href: "/about", label: "قصة جيمي كوك" },
-  { href: "/contact", label: "تواصل معنا" },
+const DRAWER_NAV = [
+  { href: "/", label: "الصفحة الرئيسية", sub: "الإيطالي والشرقي بمود مختلف" },
+  { href: "/menu", label: "المنيو التفاعلي", sub: "٨ أقسام • أحجام وإضافات مخصصة" },
+  { href: "/offers", label: "العروض والبوكسات", sub: "بوكسات التوفير ولمّة العيلة" },
+  { href: "/delivery", label: "التوصيل 24 ساعة", sub: "القاهرة الجديدة، مدينتي، الشروق وبدر" },
+  { href: "/occasions", label: "العزومات والشركات", sub: "طلبات التجمعات وتوريد الشركات" },
+  { href: "/about", label: "قصة جيمي كوك", sub: "فلسفة المطبخ والجودة" },
+  { href: "/contact", label: "تواصل معنا", sub: "أرقام الطلبات والموقع" },
 ];
 
 const QUICK_CATEGORIES = [
   { href: "/menu?cat=pizza", label: "البيتزا الإيطالية" },
   { href: "/menu?cat=feteer", label: "الفطير الشرقي" },
-  { href: "/menu?cat=pasta", label: "المكرونة والوايت صوص" },
+  { href: "/menu?cat=pasta", label: "المكرونة والباستا" },
   { href: "/menu?cat=tawagen", label: "الطواجن الفرن" },
   { href: "/menu?cat=meals", label: "الوجبات والبرجر" },
-  { href: "/menu?cat=grills", label: "المشاوي الشرقية" },
-  { href: "/menu?cat=sides", label: "الإضافات والمقبلات" },
-  { href: "/menu?cat=drinks", label: "المشروبات الباردة" },
+  { href: "/menu?cat=grills", label: "المشاوي عالفحم" },
+  { href: "/menu?cat=sides", label: "المقبلات والبطاطس" },
+  { href: "/menu?cat=drinks", label: "المشروبات" },
 ];
-
-const ORDER_PHONES = ["01020305074", "01060449933"];
 
 const SOCIAL_ITEMS = [
   {
@@ -97,7 +89,7 @@ const SOCIAL_ITEMS = [
 ];
 
 export default function Header() {
-  const { count, subtotal, bump, hydrated, openPicker } = useStore();
+  const { count, subtotal, bump, hydrated } = useStore();
   const pathname = usePathname();
   const isMenuPage = pathname?.startsWith("/menu") ?? false;
 
@@ -107,7 +99,6 @@ export default function Header() {
   const closeDrawer = () => setDrawerOpenPath(null);
 
   const [qrOpen, setQrOpen] = useState(false);
-  const [openSection, setOpenSection] = useState<"cats" | "pages" | "phones" | null>("cats");
 
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [installedNow, setInstalledNow] = useState(false);
@@ -190,16 +181,12 @@ export default function Header() {
     setShowInstallGuide(true);
   };
 
-  const toggleSection = (sec: "cats" | "pages" | "phones") => {
-    setOpenSection((prev) => (prev === sec ? null : sec));
-  };
-
   return (
     <>
       {/* =========================================================================
           TOP STICKY BAR (`dir="ltr"`):
           - Far Left (شمال): Standalone `G` Icon ONLY on all pages; Horizontal Logo ONLY on `/menu`
-          - Center (Desktop): Sculpted Navy Capsule Nav (Inspired by FORME. Top Bar)
+          - Center (Desktop): Sculpted Deep-Navy Capsule Nav
           - Far Right (يمين): Cart Pill + Menu Burger Button (≡) ALWAYS Far Right
          ========================================================================= */}
       <header className="sticky top-0 z-50 bg-[#FFF5E8]/95 backdrop-blur-md border-b border-[#0B2D5C]/10">
@@ -207,7 +194,7 @@ export default function Header() {
           dir="ltr"
           className="mx-auto max-w-7xl px-3.5 sm:px-6 lg:px-8 h-[64px] sm:h-[74px] flex items-center justify-between gap-3"
         >
-          {/* LEFT (شمال): Logo ONLY — Zero Text Next To It */}
+          {/* LEFT (شمال): Logo ONLY */}
           <Link
             href="/"
             aria-label="مطعم جيمي كوك | GIMMY COOK — الصفحة الرئيسية"
@@ -230,11 +217,11 @@ export default function Header() {
             )}
           </Link>
 
-          {/* CENTER (Desktop Only): Sculpted Deep Navy Capsule Nav */}
+          {/* CENTER (Desktop Only): Architectural Deep-Navy Capsule Nav */}
           <nav
             dir="rtl"
             aria-label="التنقل الرئيسي"
-            className="hidden lg:flex items-center justify-center gap-1 bg-[#0B2D5C] text-[#FFF5E8] rounded-full px-2 py-1.5 shadow-[0_10px_24px_-10px_rgba(11,45,92,0.45)]"
+            className="hidden lg:flex items-center justify-center gap-1 bg-[#071D3B] text-[#FFF5E8] rounded-full p-1.5 border border-[#0B2D5C]/25 shadow-[0_12px_28px_-12px_rgba(7,29,59,0.45)]"
           >
             {TOP_NAV.map((item) => {
               const active =
@@ -245,10 +232,10 @@ export default function Header() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-extrabold transition whitespace-nowrap ${
+                  className={`px-4 py-1.5 rounded-full text-xs font-extrabold transition-all duration-250 whitespace-nowrap ${
                     active
-                      ? "bg-[#FF6A00] text-white shadow-xs"
-                      : "text-[#FFF5E8]/85 hover:text-white hover:bg-white/10"
+                      ? "bg-[#FF6A00] text-white shadow-[0_6px_14px_-4px_rgba(255,106,0,0.65)]"
+                      : "text-[#FFF5E8]/80 hover:text-white hover:bg-white/[0.08]"
                   }`}
                 >
                   {item.label}
@@ -263,7 +250,7 @@ export default function Header() {
               href="/cart"
               dir="rtl"
               aria-label="سلة الطلبات"
-              className="hidden sm:inline-flex items-center gap-2 rounded-full bg-white hover:bg-[#FFC145]/25 border border-[#0B2D5C]/18 px-4 py-2 text-xs font-extrabold text-[#0B2D5C] transition shadow-2xs"
+              className="hidden sm:inline-flex items-center gap-2 rounded-full bg-white hover:bg-[#071D3B] text-[#0B2D5C] hover:text-white border border-[#0B2D5C]/15 px-4 py-2 text-xs font-extrabold transition-all duration-200 shadow-2xs group"
             >
               <span className="relative">
                 <CartIcon className="w-4 h-4 text-[#FF6A00]" />
@@ -277,7 +264,7 @@ export default function Header() {
                 )}
               </span>
               {hydrated && count > 0 ? (
-                <span className="tabular-nums text-[#FF6A00] font-black">
+                <span className="tabular-nums text-[#FF6A00] group-hover:text-[#FFC145] font-black">
                   {formatPrice(subtotal)}
                 </span>
               ) : (
@@ -290,7 +277,7 @@ export default function Header() {
               onClick={openDrawer}
               aria-label="فتح القائمة الجانبية"
               aria-expanded={drawerOpen}
-              className="w-11 h-11 rounded-full bg-[#FF6A00] hover:bg-[#0B2D5C] text-white grid place-items-center shadow-[0_8px_20px_-6px_rgba(255,106,0,0.55)] transition active:scale-95 cursor-pointer"
+              className="w-11 h-11 rounded-full bg-[#FF6A00] hover:bg-[#071D3B] text-white grid place-items-center shadow-[0_8px_20px_-6px_rgba(255,106,0,0.55)] transition-all duration-200 active:scale-95 cursor-pointer"
             >
               <MenuIcon className="w-5 h-5" />
             </button>
@@ -299,284 +286,239 @@ export default function Header() {
       </header>
 
       {/* =========================================================================
-          SYMMETRICAL SIDEBAR DRAWER (`الشريط الجانبي`)
-          Opens from Right (`يمين`), Crisp Vector Icons, Collapsible Dropdowns
+          ARCHITECTURAL RIGHT-SIDE SLIDE-OVER DRAWER (`الشريط الجانبي`)
+          - Outer wrapper uses `dir="ltr"` + `right-0` so it ALWAYS slides from RIGHT (`يمين`)!
+          - Kept mounted when `hydrated` so open/close glides smoothly at 60fps.
          ========================================================================= */}
-      {drawerOpen &&
+      {hydrated &&
         typeof document !== "undefined" &&
         createPortal(
           <div
-            className="fixed inset-0 z-[90] flex justify-end overscroll-none"
-            role="dialog"
-            aria-modal="true"
-            aria-label="القائمة الجانبية — مطعم جيمي كوك GIMMY COOK"
+            dir="ltr"
+            aria-hidden={!drawerOpen}
+            className={`fixed inset-0 z-[90] overscroll-none transition-visibility ${
+              drawerOpen ? "pointer-events-auto visible" : "pointer-events-none invisible delay-300"
+            }`}
           >
+            {/* Frosted Dark Backdrop */}
             <div
-              className="absolute inset-0 bg-[#071D3B]/65 backdrop-blur-xs transition-opacity touch-none"
               onClick={closeDrawer}
+              className={`absolute inset-0 bg-[#041024]/65 backdrop-blur-sm transition-opacity duration-300 ease-out touch-none ${
+                drawerOpen ? "opacity-100" : "opacity-0"
+              }`}
             />
 
+            {/* Right-Anchored EditorialMidnight-Navy Panel (`right-0`) */}
             <aside
               dir="rtl"
-              className="relative z-10 w-[88vw] max-w-[385px] h-full bg-[#FFF5E8] text-[#071D3B] shadow-2xl border-s-2 border-[#0B2D5C]/15 flex flex-col overflow-hidden"
+              role="dialog"
+              aria-modal="true"
+              aria-label="القائمة الجانبية — مطعم جيمي كوك GIMMY COOK"
+              className={`fixed top-0 right-0 bottom-0 z-10 w-[88vw] max-w-[400px] bg-[#071D3B] text-[#FFF5E8] shadow-[-24px_0_64px_rgba(3,12,26,0.65)] border-l border-white/10 flex flex-col overflow-hidden transition-transform duration-350 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform ${
+                drawerOpen ? "translate-x-0" : "translate-x-full"
+              }`}
             >
-              {/* 1. Drawer Top Brand Header */}
-              <div className="shrink-0 bg-gradient-to-l from-[#0B2D5C] to-[#071D3B] text-white px-4 pt-4 pb-4 border-b border-[#FFC145]/25">
-                <div dir="ltr" className="grid grid-cols-[42px_1fr_40px] items-center gap-2.5">
+              {/* Subtle Ambient Brand Glow */}
+              <div
+                className="pointer-events-none absolute -top-24 -right-24 w-72 h-72 rounded-full bg-[#FF6A00]/18 blur-3xl"
+                aria-hidden="true"
+              />
+
+              {/* 1. Top Bar (`dir="ltr"`): Logo on Left, Close (`✕`) on Far Right matching Header `≡` */}
+              <div
+                dir="ltr"
+                className="relative z-10 shrink-0 h-[64px] sm:h-[74px] px-4 sm:px-5 flex items-center justify-between border-b border-white/10"
+              >
+                <Link
+                  href="/"
+                  onClick={closeDrawer}
+                  className="flex items-center gap-2.5 min-w-0"
+                >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src="/logo-emblem.webp"
+                    src="/logo-horizontal-light.webp"
                     alt="GIMMY COOK"
-                    className="w-10 h-10 rounded-full object-contain drop-shadow-md select-none"
+                    className="h-7 sm:h-8 w-auto object-contain select-none"
                   />
+                </Link>
 
-                  <div dir="rtl" className="text-center min-w-0">
-                    <div className="font-black text-sm sm:text-base text-white truncate">
-                      مطعم جيمي كوك
-                    </div>
-                    <div className="font-en text-[10.5px] font-bold text-[#FFC145] tracking-wider truncate">
-                      GOOD FOOD • GOOD MOOD
-                    </div>
-                  </div>
+                <button
+                  type="button"
+                  onClick={closeDrawer}
+                  aria-label="إغلاق القائمة"
+                  className="w-10 h-10 rounded-full bg-white/10 hover:bg-[#FF6A00] text-white grid place-items-center transition-colors duration-200 cursor-pointer shrink-0"
+                >
+                  <CloseIcon className="w-4 h-4" />
+                </button>
+              </div>
 
-                  <button
-                    type="button"
-                    onClick={closeDrawer}
-                    aria-label="إغلاق القائمة"
-                    className="w-10 h-10 rounded-full bg-white/12 hover:bg-[#FF6A00] text-white grid place-items-center transition cursor-pointer"
-                  >
-                    <CloseIcon className="w-4 h-4" />
-                  </button>
-                </div>
-
-                {/* Symmetrical 2-Column Primary Action Row */}
-                <div className="mt-3.5 grid grid-cols-2 gap-2">
+              {/* 2. Scrollable Editorial Navigation Body */}
+              <div
+                data-modal-scroll
+                className="relative z-10 flex-1 overflow-y-auto overscroll-contain touch-pan-y px-4 sm:px-5 py-4 space-y-5"
+              >
+                {/* Primary CTA + Live Cart Strip */}
+                <div className="grid grid-cols-2 gap-2">
                   <Link
                     href="/menu"
                     onClick={closeDrawer}
-                    className="rounded-2xl bg-[#FF6A00] hover:bg-[#CE2F08] text-white py-2.5 px-3 text-xs font-black inline-flex items-center justify-center gap-1.5 transition shadow-xs whitespace-nowrap"
+                    className="rounded-full bg-[#FF6A00] hover:bg-[#FFC145] text-white hover:text-[#071D3B] py-2.5 px-3.5 text-xs font-black text-center transition shadow-[0_10px_24px_-8px_rgba(255,106,0,0.55)] whitespace-nowrap"
                   >
-                    <UtensilsIcon className="w-3.5 h-3.5 shrink-0" />
-                    <span>تصفح المنيو</span>
+                    اطلب من المنيو
                   </Link>
-
                   <Link
                     href="/cart"
                     onClick={closeDrawer}
-                    className="rounded-2xl bg-white/12 hover:bg-white text-white hover:text-[#0B2D5C] border border-white/20 py-2.5 px-3 text-xs font-black inline-flex items-center justify-center gap-1.5 transition whitespace-nowrap"
+                    className="rounded-full bg-white/[0.07] hover:bg-white text-[#FFF5E8] hover:text-[#071D3B] border border-white/12 py-2.5 px-3.5 text-xs font-black inline-flex items-center justify-center gap-1.5 transition whitespace-nowrap"
                   >
-                    <CartIcon className="w-3.5 h-3.5 text-[#FFC145] shrink-0" />
+                    <CartIcon className="w-3.5 h-3.5 text-[#FFC145]" />
                     <span>
-                      {hydrated && count > 0 ? `السلة (${count})` : "سلة الطلبات"}
+                      {count > 0 ? `السلة (${count})` : "سلة الطلبات"}
                     </span>
                   </Link>
                 </div>
-              </div>
 
-              {/* 2. Scrollable Middle Content (`data-modal-scroll`) */}
-              <div
-                data-modal-scroll
-                className="flex-1 overflow-y-auto overscroll-contain touch-pan-y p-3.5 space-y-2.5"
-              >
-                {/* Symmetrical 3-Pill Utility Strip */}
-                <div className="grid grid-cols-3 gap-1.5">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      closeDrawer();
-                      setQrOpen(true);
-                    }}
-                    className="rounded-2xl bg-white hover:bg-[#0B2D5C] text-[#0B2D5C] hover:text-white border border-[#0B2D5C]/15 py-2.5 px-2 text-[11px] font-black flex flex-col items-center justify-center gap-1 transition cursor-pointer"
-                  >
-                    <QrCodeIcon className="w-4 h-4 text-[#FF6A00]" />
-                    <span>باركود QR</span>
-                  </button>
-
-                  <Link
-                    href="/points"
-                    onClick={closeDrawer}
-                    className="rounded-2xl bg-white hover:bg-[#0B2D5C] text-[#0B2D5C] hover:text-white border border-[#0B2D5C]/15 py-2.5 px-2 text-[11px] font-black flex flex-col items-center justify-center gap-1 transition"
-                  >
-                    <GiftPointsIcon className="w-4 h-4 text-[#FF6A00]" />
-                    <span>نقاط جيمي</span>
-                  </Link>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      closeDrawer();
-                      openPicker();
-                    }}
-                    className="rounded-2xl bg-white hover:bg-[#0B2D5C] text-[#0B2D5C] hover:text-white border border-[#0B2D5C]/15 py-2.5 px-2 text-[11px] font-black flex flex-col items-center justify-center gap-1 transition cursor-pointer"
-                  >
-                    <Truck24Icon className="w-4 h-4 text-[#FF6A00]" />
-                    <span>دليفري 24س</span>
-                  </button>
-                </div>
-
-                {/* Collapsible Section 1: أقسام المنيو */}
-                <div className="rounded-2xl bg-white border border-[#0B2D5C]/14 overflow-hidden">
-                  <button
-                    type="button"
-                    onClick={() => toggleSection("cats")}
-                    aria-expanded={openSection === "cats"}
-                    className="w-full px-3.5 py-3 flex items-center justify-between text-xs sm:text-sm font-black text-[#0B2D5C] cursor-pointer"
-                  >
-                    <span className="flex items-center gap-2">
-                      <UtensilsIcon className="w-4 h-4 text-[#FF6A00]" />
-                      <span>أقسام منيو جيمي كوك (٨)</span>
-                    </span>
-                    <ChevronDownIcon
-                      className={`w-4 h-4 text-[#0B2D5C] transition-transform duration-200 ${
-                        openSection === "cats" ? "rotate-180" : ""
-                      }`}
-                    />
-                  </button>
-                  {openSection === "cats" && (
-                    <div className="px-3 pb-3 pt-1 border-t border-[#0B2D5C]/10 grid grid-cols-2 gap-1.5">
-                      {QUICK_CATEGORIES.map((cat) => (
-                        <Link
-                          key={cat.href}
-                          href={cat.href}
-                          onClick={closeDrawer}
-                          className="rounded-xl bg-[#FFF5E8] hover:bg-[#FF6A00] text-[#071D3B] hover:text-white border border-[#0B2D5C]/10 px-2.5 py-2 text-xs font-extrabold text-center truncate transition"
-                        >
-                          {cat.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* Collapsible Section 2: صفحات الموقع */}
-                <div className="rounded-2xl bg-white border border-[#0B2D5C]/14 overflow-hidden">
-                  <button
-                    type="button"
-                    onClick={() => toggleSection("pages")}
-                    aria-expanded={openSection === "pages"}
-                    className="w-full px-3.5 py-3 flex items-center justify-between text-xs sm:text-sm font-black text-[#0B2D5C] cursor-pointer"
-                  >
-                    <span className="flex items-center gap-2">
-                      <PinIcon className="w-4 h-4 text-[#FF6A00]" />
-                      <span>صفحات الموقع والخدمات</span>
-                    </span>
-                    <ChevronDownIcon
-                      className={`w-4 h-4 text-[#0B2D5C] transition-transform duration-200 ${
-                        openSection === "pages" ? "rotate-180" : ""
-                      }`}
-                    />
-                  </button>
-                  {openSection === "pages" && (
-                    <div className="px-3 pb-3 pt-1 border-t border-[#0B2D5C]/10 grid grid-cols-2 gap-1.5">
-                      {SITE_PAGES.map((pg) => (
-                        <Link
-                          key={pg.href}
-                          href={pg.href}
-                          onClick={closeDrawer}
-                          className="rounded-xl bg-[#FFF5E8] hover:bg-[#0B2D5C] text-[#071D3B] hover:text-white border border-[#0B2D5C]/10 px-2.5 py-2 text-xs font-extrabold text-center truncate transition"
-                        >
-                          {pg.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* Collapsible Section 3: أرقام الطلبات والواتساب */}
-                <div className="rounded-2xl bg-white border border-[#0B2D5C]/14 overflow-hidden">
-                  <button
-                    type="button"
-                    onClick={() => toggleSection("phones")}
-                    aria-expanded={openSection === "phones"}
-                    className="w-full px-3.5 py-3 flex items-center justify-between text-xs sm:text-sm font-black text-[#0B2D5C] cursor-pointer"
-                  >
-                    <span className="flex items-center gap-2">
-                      <PhoneIcon className="w-4 h-4 text-[#FF6A00]" />
-                      <span>أرقام الطلبات والواتساب 24 ساعة</span>
-                    </span>
-                    <ChevronDownIcon
-                      className={`w-4 h-4 text-[#0B2D5C] transition-transform duration-200 ${
-                        openSection === "phones" ? "rotate-180" : ""
-                      }`}
-                    />
-                  </button>
-                  {openSection === "phones" && (
-                    <div className="px-3 pb-3 pt-1 border-t border-[#0B2D5C]/10 space-y-2">
-                      <div className="grid grid-cols-2 gap-1.5" dir="ltr">
-                        {ORDER_PHONES.map((ph, i) => (
-                          <a
-                            key={ph}
-                            href={`tel:${ph}`}
-                            className={`rounded-xl py-2.5 px-2.5 text-xs font-en font-black inline-flex items-center justify-center gap-1.5 transition ${
-                              i === 0
-                                ? "bg-[#FF6A00] text-white"
-                                : "bg-[#FFF5E8] text-[#0B2D5C] border border-[#0B2D5C]/15"
+                {/* Main Editorial Navigation Links */}
+                <nav aria-label="روابط الموقع" className="space-y-1">
+                  {DRAWER_NAV.map((item, i) => {
+                    const active =
+                      item.href === "/"
+                        ? pathname === "/"
+                        : pathname === item.href || pathname?.startsWith(`${item.href}/`);
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        onClick={closeDrawer}
+                        className={`group flex items-center justify-between gap-3 rounded-2xl px-3.5 py-2.5 transition-all duration-200 ${
+                          active
+                            ? "bg-[#FF6A00] text-white shadow-[0_10px_24px_-10px_rgba(255,106,0,0.6)]"
+                            : "hover:bg-white/[0.06] text-[#FFF5E8]"
+                        }`}
+                      >
+                        <div className="min-w-0 text-right">
+                          <div className="text-sm font-black leading-snug truncate">
+                            {item.label}
+                          </div>
+                          <div
+                            className={`text-[11px] font-medium truncate mt-0.5 ${
+                              active ? "text-white/85" : "text-[#FFF5E8]/50 group-hover:text-[#FFF5E8]/75"
                             }`}
                           >
-                            <PhoneIcon className="w-3.5 h-3.5 shrink-0" />
-                            <span>{ph}</span>
-                          </a>
-                        ))}
-                      </div>
-                      <a
-                        href="https://wa.me/201060449933"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-full rounded-xl bg-[#0B2D5C] hover:bg-[#143A73] text-[#FFC145] py-2.5 px-3 text-xs font-black inline-flex items-center justify-center gap-2 transition"
+                            {item.sub}
+                          </div>
+                        </div>
+
+                        <span
+                          dir="ltr"
+                          className={`font-en text-[11px] font-bold tracking-wider shrink-0 ${
+                            active ? "text-white/90" : "text-[#FFC145]/60 group-hover:text-[#FFC145]"
+                          }`}
+                        >
+                          0{i + 1}
+                        </span>
+                      </Link>
+                    );
+                  })}
+                </nav>
+
+                {/* Quick Menu Chapters Grid */}
+                <div className="pt-3 border-t border-white/10">
+                  <div className="flex items-center justify-between mb-2.5 px-1">
+                    <span className="text-[11px] font-extrabold text-[#FFC145] tracking-wide">
+                      أقسام المنيو السريعة
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        closeDrawer();
+                        setQrOpen(true);
+                      }}
+                      className="inline-flex items-center gap-1 text-[11px] font-bold text-[#FFF5E8]/70 hover:text-white transition cursor-pointer"
+                    >
+                      <QrCodeIcon className="w-3.5 h-3.5 text-[#FF6A00]" />
+                      <span>باركود QR</span>
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-1.5">
+                    {QUICK_CATEGORIES.map((cat) => (
+                      <Link
+                        key={cat.href}
+                        href={cat.href}
+                        onClick={closeDrawer}
+                        className="rounded-xl bg-white/[0.05] hover:bg-[#FF6A00] border border-white/[0.08] hover:border-[#FF6A00] px-3 py-2 text-xs font-bold text-[#FFF5E8]/90 hover:text-white text-right truncate transition-colors duration-200"
                       >
-                        <WhatsAppIcon className="w-4 h-4 shrink-0" />
-                        <span>اطلب مباشرة عبر واتساب</span>
-                      </a>
-                    </div>
-                  )}
+                        {cat.label}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
 
-                {/* PWA App Install Card */}
+                {/* Subtle App Install Row (Only when not installed) */}
                 {!isStandalone && (
                   <button
                     type="button"
                     onClick={handleInstallClick}
-                    className="w-full rounded-2xl bg-[#FFC145]/30 hover:bg-[#FFC145]/55 border border-[#0B2D5C]/15 p-3 flex items-center justify-between gap-3 transition cursor-pointer text-right"
+                    className="w-full rounded-2xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 px-3.5 py-2.5 flex items-center justify-between gap-3 transition cursor-pointer text-right"
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
-                      <span className="w-9 h-9 rounded-xl bg-[#0B2D5C] text-[#FFC145] grid place-items-center shrink-0">
-                        <DownloadAppIcon className="w-4 h-4" />
+                      <DownloadAppIcon className="w-4 h-4 text-[#FFC145] shrink-0" />
+                      <span className="text-xs font-bold text-[#FFF5E8]/90 truncate">
+                        تثبيت تطبيق جيمي كوك على جهازك
                       </span>
-                      <div className="min-w-0">
-                        <div className="text-xs font-black text-[#0B2D5C] truncate">
-                          تثبيت تطبيق GIMMY COOK
-                        </div>
-                        <div className="text-[11px] font-bold text-[#071D3B]/70 truncate">
-                          اطلب أسرع بضغطة واحدة من شاشتك
-                        </div>
-                      </div>
                     </div>
-                    <span className="shrink-0 rounded-full bg-[#FF6A00] text-white px-2.5 py-1 text-[10px] font-black">
+                    <span className="shrink-0 rounded-full bg-white/12 px-2.5 py-0.5 text-[10px] font-extrabold text-[#FFC145]">
                       تثبيت
                     </span>
                   </button>
                 )}
               </div>
 
-              {/* 3. Drawer Footer: Symmetrical 4 Social Icons */}
-              <div className="shrink-0 p-3.5 bg-white border-t border-[#0B2D5C]/12">
-                <div className="grid grid-cols-4 gap-2">
-                  {SOCIAL_ITEMS.map((item) => {
-                    const Icon = item.icon;
-                    return (
-                      <a
-                        key={item.label}
-                        href={item.href}
-                        target={item.href.startsWith("mailto:") ? undefined : "_blank"}
-                        rel={item.href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
-                        aria-label={item.label}
-                        title={item.label}
-                        className="h-10 rounded-xl bg-[#FFF5E8] hover:bg-[#0B2D5C] text-[#0B2D5C] hover:text-white border border-[#0B2D5C]/14 grid place-items-center transition"
-                      >
-                        <Icon className="w-4 h-4" />
-                      </a>
-                    );
-                  })}
+              {/* 3. Sleek Bottom Concierge & Social Dock */}
+              <div className="relative z-10 shrink-0 px-4 sm:px-5 py-3.5 bg-[#05152D] border-t border-white/10 space-y-2.5">
+                <div className="grid grid-cols-2 gap-2" dir="ltr">
+                  <a
+                    href="tel:01020305074"
+                    className="rounded-xl bg-white/[0.07] hover:bg-[#FF6A00] text-white border border-white/10 py-2 px-2.5 text-xs font-en font-extrabold inline-flex items-center justify-center gap-1.5 transition"
+                  >
+                    <PhoneIcon className="w-3.5 h-3.5 text-[#FFC145]" />
+                    <span>01020305074</span>
+                  </a>
+                  <a
+                    href="https://wa.me/201060449933"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    dir="rtl"
+                    className="rounded-xl bg-[#FF6A00]/18 hover:bg-[#FF6A00] text-[#FFC145] hover:text-white border border-[#FF6A00]/35 py-2 px-2.5 text-xs font-extrabold inline-flex items-center justify-center gap-1.5 transition"
+                  >
+                    <WhatsAppIcon className="w-3.5 h-3.5 shrink-0" />
+                    <span>واتساب 24س</span>
+                  </a>
+                </div>
+
+                <div className="flex items-center justify-between pt-0.5">
+                  <span className="font-en text-[10px] font-bold tracking-widest text-[#FFF5E8]/45">
+                    GOOD FOOD • GOOD MOOD
+                  </span>
+                  <div className="flex items-center gap-1.5">
+                    {SOCIAL_ITEMS.map((item) => {
+                      const Icon = item.icon;
+                      return (
+                        <a
+                          key={item.label}
+                          href={item.href}
+                          target={item.href.startsWith("mailto:") ? undefined : "_blank"}
+                          rel={item.href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
+                          aria-label={item.label}
+                          title={item.label}
+                          className="w-8 h-8 rounded-full bg-white/[0.06] hover:bg-[#FF6A00] text-[#FFF5E8]/80 hover:text-white grid place-items-center transition"
+                        >
+                          <Icon className="w-3.5 h-3.5" />
+                        </a>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
             </aside>
@@ -595,46 +537,46 @@ export default function Header() {
             aria-label="تثبيت تطبيق جيمي كوك"
           >
             <div
-              className="absolute inset-0 bg-[#071D3B]/65 backdrop-blur-xs touch-none"
+              className="absolute inset-0 bg-[#041024]/70 backdrop-blur-sm touch-none"
               onClick={() => setShowInstallGuide(false)}
             />
             <div
               dir="rtl"
-              className="relative z-10 w-full sm:max-w-sm rounded-t-[28px] sm:rounded-[28px] bg-[#FFF5E8] border-2 border-[#0B2D5C]/20 p-5 shadow-2xl space-y-4"
+              className="relative z-10 w-full sm:max-w-sm rounded-t-[28px] sm:rounded-[28px] bg-[#071D3B] text-[#FFF5E8] border border-white/15 p-5 shadow-2xl space-y-4"
             >
               <div className="flex items-center justify-between">
-                <h3 className="font-black text-base text-[#0B2D5C]">
+                <h3 className="font-black text-base text-white">
                   تثبيت تطبيق GIMMY COOK
                 </h3>
                 <button
                   type="button"
                   onClick={() => setShowInstallGuide(false)}
-                  className="w-8 h-8 rounded-full bg-white border border-[#0B2D5C]/15 grid place-items-center cursor-pointer"
+                  className="w-8 h-8 rounded-full bg-white/10 hover:bg-[#FF6A00] text-white grid place-items-center cursor-pointer transition"
                   aria-label="إغلاق"
                 >
                   <CloseIcon className="w-4 h-4" />
                 </button>
               </div>
               {isIosDevice ? (
-                <div className="space-y-2.5 text-xs font-bold text-[#071D3B]/85 leading-relaxed">
+                <div className="space-y-2.5 text-xs font-bold text-[#FFF5E8]/85 leading-relaxed">
                   <p className="flex items-center gap-2">
-                    <ShareIosIcon className="w-4 h-4 text-[#FF6A00] shrink-0" />
+                    <ShareIosIcon className="w-4 h-4 text-[#FFC145] shrink-0" />
                     <span>١. اضغط على زر المشاركة (Share) في متصفح Safari بالأسفل.</span>
                   </p>
                   <p className="flex items-center gap-2">
-                    <CheckIcon className="w-4 h-4 text-[#FF6A00] shrink-0" />
+                    <CheckIcon className="w-4 h-4 text-[#FFC145] shrink-0" />
                     <span>٢. اختر «إضافة إلى الشاشة الرئيسية» (Add to Home Screen).</span>
                   </p>
                 </div>
               ) : (
-                <p className="text-xs font-bold text-[#071D3B]/85 leading-relaxed">
+                <p className="text-xs font-bold text-[#FFF5E8]/85 leading-relaxed">
                   من قائمة المتصفح العلوية (⋮)، اختر «تثبيت التطبيق» أو «الإضافة إلى الشاشة الرئيسية» لفتح منيو جيمي كوك بسرعة في أي وقت.
                 </p>
               )}
               <button
                 type="button"
                 onClick={() => setShowInstallGuide(false)}
-                className="btn btn-primary w-full py-2.5 text-xs"
+                className="w-full rounded-full bg-[#FF6A00] hover:bg-[#FFC145] text-white hover:text-[#071D3B] py-2.5 text-xs font-black transition cursor-pointer"
               >
                 حسناً، فهمت
               </button>

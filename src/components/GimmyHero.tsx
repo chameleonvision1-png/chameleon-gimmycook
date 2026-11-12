@@ -80,27 +80,56 @@ const SLIDES: HeroSlide[] = [
   },
 ];
 
-/* Smooth C1-Continuous Inverted Concave Fillet SVGs (Exact FORME. Bento Architecture) */
-function FilletTopLeft({ className = "w-6 h-6" }: { className?: string }) {
+/* ============================================================================
+   MATHEMATICALLY EXACT C1-CONTINUOUS INVERTED CONCAVE FILLET SVGs
+   Includes 1px solid overlap bleed into adjacent white walls so subpixel seams
+   never appear at any browser zoom / DPR (100%, 125%, 150%, 200%).
+   ============================================================================ */
+
+/** White on TOP (`y<=0`) and LEFT (`x<=0`); concave curve opens toward bottom-right */
+function ConcaveTL({ size = 24, className = "" }: { size?: number; className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" className={`${className} fill-white pointer-events-none select-none`} aria-hidden>
-      <path d="M0 0 L24 0 A24 24 0 0 0 0 24 Z" />
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      overflow="visible"
+      className={`fill-white pointer-events-none select-none block ${className}`}
+      aria-hidden="true"
+    >
+      <path d="M -1 -1 L 24 -1 L 24 0 A 24 24 0 0 0 0 24 L -1 24 Z" />
     </svg>
   );
 }
 
-function FilletTopRight({ className = "w-6 h-6" }: { className?: string }) {
+/** White on TOP (`y<=0`) and RIGHT (`x>=24`); concave curve opens toward bottom-left */
+function ConcaveTR({ size = 24, className = "" }: { size?: number; className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" className={`${className} fill-white pointer-events-none select-none`} aria-hidden>
-      <path d="M24 0 L0 0 A24 24 0 0 1 24 24 Z" />
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      overflow="visible"
+      className={`fill-white pointer-events-none select-none block ${className}`}
+      aria-hidden="true"
+    >
+      <path d="M 25 -1 L 0 -1 L 0 0 A 24 24 0 0 1 24 24 L 25 24 Z" />
     </svg>
   );
 }
 
-function FilletBottomLeft({ className = "w-6 h-6" }: { className?: string }) {
+/** White on BOTTOM (`y>=24`) and LEFT (`x<=0`); concave curve opens toward top-right */
+function ConcaveBL({ size = 24, className = "" }: { size?: number; className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" className={`${className} fill-white pointer-events-none select-none`} aria-hidden>
-      <path d="M0 24 L0 0 A24 24 0 0 0 24 24 Z" />
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      overflow="visible"
+      className={`fill-white pointer-events-none select-none block ${className}`}
+      aria-hidden="true"
+    >
+      <path d="M -1 25 L -1 0 L 0 0 A 24 24 0 0 0 24 24 L 24 25 Z" />
     </svg>
   );
 }
@@ -113,17 +142,17 @@ export default function GimmyHero() {
 
   const slide = SLIDES[idx];
 
-  const handleQuickAdd = () => {
+  const handleQuickAdd = (s: HeroSlide) => {
     addToCart({
-      productId: slide.productId,
-      name: slide.productName,
-      image: slide.image,
-      sizeLabel: slide.sizeLabel,
+      productId: s.productId,
+      name: s.productName,
+      image: s.image,
+      sizeLabel: s.sizeLabel,
       addons: [],
-      unitPrice: slide.price,
+      unitPrice: s.price,
       qty: 1,
     });
-    setAddedId(slide.id);
+    setAddedId(s.id);
     setTimeout(() => setAddedId(null), 1300);
   };
 
@@ -135,10 +164,11 @@ export default function GimmyHero() {
     <section className="px-2.5 sm:px-6 lg:px-8 pt-2.5 sm:pt-4 overflow-x-clip">
       <div className="mx-auto max-w-7xl">
         {/* =====================================================================
-            OUTER SCULPTED ARCHITECTURAL FRAME (`bg-white`)
-            Inspired directly by the FORME. Bento-Cutout UI Reference
+            OUTER SCULPTED ARCHITECTURAL FRAME (`rounded-[36px] p-3` = 12px moat)
+            Concentric Radius Law: R_outer (36px) - moat (12px) = R_inner (24px)
            ===================================================================== */}
-        <div className="rounded-[32px] sm:rounded-[42px] bg-white p-2 sm:p-3 lg:p-3.5 border border-[#0B2D5C]/12 shadow-[0_28px_68px_-24px_rgba(11,45,92,0.34)]">
+        <div className="rounded-[30px] sm:rounded-[36px] bg-white p-2 sm:p-3 border border-[#0B2D5C]/10 shadow-[0_26px_64px_-24px_rgba(7,29,59,0.28)]">
+          {/* STAGE CONTAINER: Cutouts sit as unclipped siblings over the Navy Canvas */}
           <div
             onTouchStart={(e) => {
               touchStartX.current = e.touches[0]?.clientX ?? null;
@@ -147,151 +177,89 @@ export default function GimmyHero() {
               if (touchStartX.current === null) return;
               const dx = (e.changedTouches[0]?.clientX ?? 0) - touchStartX.current;
               touchStartX.current = null;
-              if (Math.abs(dx) > 44) {
+              if (Math.abs(dx) > 42) {
                 setIdx((prev) =>
                   dx > 0 ? (prev + 1) % SLIDES.length : (prev - 1 + SLIDES.length) % SLIDES.length,
                 );
               }
             }}
-            className="relative rounded-[26px] sm:rounded-[34px] bg-gradient-to-br from-[#0B2D5C] via-[#082246] to-[#05152D] text-[#FFF5E8] overflow-hidden h-[525px] sm:h-[560px] lg:h-[595px] xl:h-[620px]"
+            className="relative h-[525px] sm:h-[558px] lg:h-[596px] xl:h-[620px] w-full"
           >
-            {/* Studio Warm Orange & Cheese-Gold Radial Illumination */}
-            <div
-              className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_46%_54%,rgba(255,106,0,0.28),rgba(20,58,115,0.18)_42%,transparent_70%)]"
-              aria-hidden="true"
-            />
-
             {/* =================================================================
-                DESKTOP BENTO-CUTOUT ARCHITECTURE (`hidden lg:block h-full`)
-                Exact FORME. Curved Corner Notches + Center Callout Pin + Bold Statement
+                INNER NAVY CANVAS (`rounded-[22px] sm:rounded-[24px]`)
                ================================================================= */}
-            <div dir="ltr" className="hidden lg:block h-full w-full relative z-10">
-              {/* 1. TOP-LEFT STEPPED BENTO CUTOUT: Spotlight Card + 24/7 Pill */}
-              <div className="absolute top-0 left-0 z-20 flex items-start">
-                {/* Spotlight Thumbnail Cutout Box */}
-                <div className="relative bg-white rounded-br-[28px] pr-3 pb-3">
-                  <Link
-                    href={slide.secondaryHref}
-                    className="group relative block w-[154px] h-[132px] rounded-[22px] overflow-hidden bg-[#071D3B] shadow-md"
-                  >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={slide.secondaryThumb}
-                      alt={slide.secondaryLabel}
-                      className="w-full h-full object-cover transition duration-500 group-hover:scale-108"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#071D3B]/85 via-transparent to-transparent" />
-                    <span
-                      dir="rtl"
-                      className="absolute inset-x-2 bottom-2 rounded-full bg-[#0B2D5C]/90 group-hover:bg-[#FF6A00] text-white py-1.5 px-2.5 text-[11px] font-black text-center truncate transition"
-                    >
-                      {slide.secondaryLabel}
-                    </span>
-                  </Link>
-                  {/* Bottom-left concave bridge under thumbnail */}
-                  <div className="absolute -bottom-6 left-0">
-                    <FilletTopLeft />
-                  </div>
-                </div>
+            <div className="absolute inset-0 rounded-[22px] sm:rounded-[24px] bg-gradient-to-br from-[#0B2D5C] via-[#082246] to-[#05152D] text-[#FFF5E8] overflow-hidden">
+              {/* Studio Warm Radial Illumination */}
+              <div
+                className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_44%_54%,rgba(255,106,0,0.26),rgba(20,58,115,0.18)_44%,transparent_72%)]"
+                aria-hidden="true"
+              />
 
-                {/* Adjacent Stepped Status Pill Cutout (`• 24/7 DELIVERY`) */}
-                <div className="relative bg-white rounded-br-[26px] pr-3 pb-3">
-                  <Link
-                    href="/delivery"
-                    dir="rtl"
-                    className="h-[52px] px-5 rounded-[20px] bg-[#0B2D5C] hover:bg-[#FF6A00] text-[#FFF5E8] inline-flex items-center gap-2 text-xs font-black transition shadow-xs whitespace-nowrap"
-                  >
-                    <Truck24Icon className="w-4 h-4 text-[#FFC145]" />
-                    <span>{slide.sticker} • القاهرة الجديدة</span>
-                  </Link>
-                  {/* Concave bridge to top bar */}
-                  <div className="absolute top-0 -right-6">
-                    <FilletTopLeft />
-                  </div>
-                  {/* Concave bridge between tall thumbnail and shorter pill */}
-                  <div className="absolute -bottom-6 left-0">
-                    <FilletTopLeft />
-                  </div>
-                </div>
-              </div>
+              {/* DESKTOP CENTER CONTENT (`hidden lg:grid`) — Smooth Crossfade Across Slides */}
+              <div
+                dir="ltr"
+                className="hidden lg:grid h-full w-full grid-cols-12 items-center px-10 xl:px-14 relative z-10"
+              >
+                {/* Left/Center Dish Showcase + Interactive Callout Pin (Cols 1-6) */}
+                <div className="col-span-6 flex flex-col items-center justify-center pt-16 pb-16 relative">
+                  <div className="relative w-[312px] xl:w-[352px] h-[260px] xl:h-[290px]">
+                    {SLIDES.map((s, i) => {
+                      const active = i === idx;
+                      return (
+                        <div
+                          key={s.id}
+                          aria-hidden={!active}
+                          className={`absolute inset-0 rounded-[30px] p-2 bg-white/[0.08] border border-white/15 shadow-[0_28px_60px_-18px_rgba(0,0,0,0.65)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                            active
+                              ? "opacity-100 scale-100 translate-y-0 z-10"
+                              : "opacity-0 scale-[0.96] translate-y-2 pointer-events-none z-0"
+                          }`}
+                        >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={s.image}
+                            alt={s.productName}
+                            className="w-full h-full rounded-[22px] object-cover select-none"
+                          />
 
-              {/* 2. TOP-RIGHT BENTO CUTOUT: 3 Symmetrical Category Switcher Pills */}
-              <div className="absolute top-0 right-0 z-20 bg-white rounded-bl-[28px] pl-3 pb-3">
-                <div dir="rtl" className="grid grid-cols-3 gap-2">
-                  {SLIDES.map((s, i) => {
-                    const active = i === idx;
-                    return (
-                      <button
-                        key={s.id}
-                        type="button"
-                        onClick={() => setIdx(i)}
-                        className={`h-[48px] min-w-[96px] px-4 rounded-full text-xs font-black transition cursor-pointer whitespace-nowrap ${
-                          active
-                            ? "bg-[#FF6A00] text-white shadow-[0_8px_18px_-6px_rgba(255,106,0,0.65)]"
-                            : "bg-[#0B2D5C] hover:bg-[#143A73] text-[#FFF5E8]"
-                        }`}
-                      >
-                        {s.tabLabel}
-                      </button>
-                    );
-                  })}
-                </div>
-                {/* Concave bridges */}
-                <div className="absolute top-0 -left-6">
-                  <FilletTopRight />
-                </div>
-                <div className="absolute -bottom-6 right-0">
-                  <FilletTopRight />
-                </div>
-              </div>
+                          {/* Interactive Callout Pin Anchored to Dish */}
+                          <div
+                            dir="rtl"
+                            className="absolute -bottom-5 right-4 left-4 rounded-2xl bg-[#071D3B]/95 backdrop-blur-md border border-[#FFC145]/35 px-3.5 py-2.5 flex items-center justify-between gap-2 shadow-xl"
+                          >
+                            <div className="flex items-center gap-2.5 min-w-0">
+                              <span className="w-2.5 h-2.5 rounded-full bg-[#FF6A00] ring-4 ring-[#FF6A00]/25 shrink-0" />
+                              <div className="min-w-0">
+                                <div className="text-xs font-black text-white truncate">
+                                  {s.calloutTitle}
+                                </div>
+                                <div className="text-[11px] font-extrabold text-[#FFC145] tabular-nums">
+                                  {s.price} ج.م • {s.sizeLabel}
+                                </div>
+                              </div>
+                            </div>
 
-              {/* 3. CENTER HERO DISH + INTERACTIVE CALLOUT PIN (`●────── Dish • Price`) */}
-              <div className="h-full grid grid-cols-12 items-center px-10 xl:px-14">
-                {/* Left/Center Visual & Callout Pin (Cols 1-6) */}
-                <div className="col-span-6 flex flex-col items-center justify-center pt-16 pb-20 relative">
-                  <div className="relative w-[305px] xl:w-[345px] h-[255px] xl:h-[285px] rounded-[32px] p-2 bg-white/8 border border-white/15 shadow-[0_28px_60px_-18px_rgba(0,0,0,0.65)]">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={slide.image}
-                      alt={slide.productName}
-                      className="w-full h-full rounded-[24px] object-cover select-none"
-                    />
-
-                    {/* Interactive FORME.-Style Callout Pin Anchored to Dish */}
-                    <div
-                      dir="rtl"
-                      className="absolute -bottom-5 right-4 left-4 rounded-2xl bg-[#071D3B]/92 backdrop-blur-md border border-[#FFC145]/35 px-3.5 py-2.5 flex items-center justify-between gap-2 shadow-xl"
-                    >
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#FF6A00] ring-4 ring-[#FF6A00]/25 shrink-0" />
-                        <div className="min-w-0">
-                          <div className="text-xs font-black text-white truncate">
-                            {slide.calloutTitle}
-                          </div>
-                          <div className="text-[11px] font-extrabold text-[#FFC145] tabular-nums">
-                            {slide.price} ج.م • {slide.sizeLabel}
+                            <button
+                              type="button"
+                              onClick={() => handleQuickAdd(s)}
+                              className="shrink-0 rounded-full bg-[#FF6A00] hover:bg-[#FFC145] text-white hover:text-[#0B2D5C] px-3.5 py-1.5 text-[11px] font-black inline-flex items-center gap-1 transition cursor-pointer"
+                            >
+                              {addedId === s.id ? (
+                                <>
+                                  <CheckIcon className="w-3.5 h-3.5" />
+                                  <span>تمت الإضافة</span>
+                                </>
+                              ) : (
+                                <>
+                                  <PlusIcon className="w-3.5 h-3.5" />
+                                  <span>أضف للسلة</span>
+                                </>
+                              )}
+                            </button>
                           </div>
                         </div>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={handleQuickAdd}
-                        className="shrink-0 rounded-full bg-[#FF6A00] hover:bg-[#FFC145] text-white hover:text-[#0B2D5C] px-3.5 py-1.5 text-[11px] font-black inline-flex items-center gap-1 transition cursor-pointer"
-                      >
-                        {addedId === slide.id ? (
-                          <>
-                            <CheckIcon className="w-3.5 h-3.5" />
-                            <span>تمت الإضافة</span>
-                          </>
-                        ) : (
-                          <>
-                            <PlusIcon className="w-3.5 h-3.5" />
-                            <span>أضف للسلة</span>
-                          </>
-                        )}
-                      </button>
-                    </div>
+                      );
+                    })}
                   </div>
                 </div>
 
@@ -306,21 +274,36 @@ export default function GimmyHero() {
                     <span>مطعم جيمي كوك</span>
                   </div>
 
-                  {/* Editorial Micro-Description (Locked 48px Height) */}
-                  <p className="mt-4 text-sm xl:text-base font-bold text-[#FFF5E8]/82 leading-relaxed max-w-lg h-[48px] line-clamp-2">
-                    {slide.subtitle}
-                  </p>
-
-                  {/* Massive Statement Display Headline (Locked 2-Line Block) */}
-                  <h1 className="mt-3 text-[40px] xl:text-[50px] font-black leading-[1.24] tracking-tight text-white">
-                    <span className="block whitespace-nowrap">{slide.headlineTop}</span>
-                    <span className="block text-[#FF6A00] mt-1.5 whitespace-nowrap">
-                      {slide.headlineBottom}
-                    </span>
-                  </h1>
+                  {/* Smooth Crossfading Text Stack (Zero Height Shift) */}
+                  <div className="relative mt-4 h-[176px] xl:h-[198px]">
+                    {SLIDES.map((s, i) => {
+                      const active = i === idx;
+                      return (
+                        <div
+                          key={s.id}
+                          aria-hidden={!active}
+                          className={`absolute inset-0 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                            active
+                              ? "opacity-100 translate-y-0 z-10"
+                              : "opacity-0 translate-y-2 pointer-events-none z-0"
+                          }`}
+                        >
+                          <p className="text-sm xl:text-base font-bold text-[#FFF5E8]/82 leading-relaxed max-w-lg h-[48px] line-clamp-2">
+                            {s.subtitle}
+                          </p>
+                          <h1 className="mt-3 text-[40px] xl:text-[50px] font-black leading-[1.24] tracking-tight text-white">
+                            <span className="block whitespace-nowrap">{s.headlineTop}</span>
+                            <span className="block text-[#FF6A00] mt-1.5 whitespace-nowrap">
+                              {s.headlineBottom}
+                            </span>
+                          </h1>
+                        </div>
+                      );
+                    })}
+                  </div>
 
                   {/* Primary & Secondary Action Pills */}
-                  <div className="mt-5 flex items-center gap-3">
+                  <div className="mt-4 flex items-center gap-3">
                     <Link
                       href="/menu"
                       className="rounded-full bg-[#FF6A00] hover:bg-[#FFC145] text-white hover:text-[#0B2D5C] px-7 py-3.5 text-sm font-black transition shadow-[0_14px_30px_-8px_rgba(255,106,0,0.6)] whitespace-nowrap"
@@ -339,14 +322,14 @@ export default function GimmyHero() {
                   </div>
 
                   {/* Slide Progress Indicators */}
-                  <div className="mt-6 flex items-center gap-2">
+                  <div className="mt-5 flex items-center gap-2">
                     {SLIDES.map((s, i) => (
                       <button
                         key={s.id}
                         type="button"
                         onClick={() => setIdx(i)}
                         aria-label={`شريحة ${i + 1}`}
-                        className={`h-2 rounded-full transition-all cursor-pointer ${
+                        className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
                           i === idx ? "w-9 bg-[#FF6A00]" : "w-2.5 bg-white/30 hover:bg-white/55"
                         }`}
                       />
@@ -355,136 +338,255 @@ export default function GimmyHero() {
                 </div>
               </div>
 
-              {/* 4. BOTTOM-LEFT BENTO CUTOUT: GIMMY POINTS Loyalty Card (Echoes Explore AR Inset) */}
-              <div className="absolute bottom-0 left-0 z-20 bg-white rounded-tr-[28px] pr-3 pt-3">
+              {/* ===============================================================
+                  MOBILE & TABLET HERO (`lg:hidden`) — Smooth Crossfade + 0px Shift
+                 =============================================================== */}
+              <div
+                dir="rtl"
+                className="lg:hidden h-full flex flex-col justify-between p-4 sm:p-6 relative z-10"
+              >
+                {/* Top Symmetrical 3-Column Category Switcher */}
+                <div className="grid grid-cols-3 gap-1.5 bg-white/10 p-1 rounded-full border border-white/12">
+                  {SLIDES.map((s, i) => {
+                    const active = i === idx;
+                    return (
+                      <button
+                        key={s.id}
+                        type="button"
+                        onClick={() => setIdx(i)}
+                        className={`py-1.5 px-2 rounded-full text-xs font-black transition-all duration-300 cursor-pointer truncate ${
+                          active
+                            ? "bg-[#FF6A00] text-white shadow-xs"
+                            : "text-[#FFF5E8]/85 hover:text-white"
+                        }`}
+                      >
+                        {s.tabLabel}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Locked-Height Crossfading Headline & Subtitle */}
+                <div className="relative h-[112px] sm:h-[134px] mt-1">
+                  {SLIDES.map((s, i) => {
+                    const active = i === idx;
+                    return (
+                      <div
+                        key={s.id}
+                        aria-hidden={!active}
+                        className={`absolute inset-0 text-center transition-all duration-400 ease-out ${
+                          active
+                            ? "opacity-100 translate-y-0 z-10"
+                            : "opacity-0 translate-y-1.5 pointer-events-none z-0"
+                        }`}
+                      >
+                        <h1 className="text-[26px] sm:text-[34px] font-black leading-[1.26] text-white h-[68px] sm:h-[86px] flex flex-col justify-center">
+                          <span className="block whitespace-nowrap">{s.headlineTop}</span>
+                          <span className="block text-[#FF6A00] whitespace-nowrap">
+                            {s.headlineBottom}
+                          </span>
+                        </h1>
+                        <p className="mt-1.5 text-xs sm:text-sm font-bold text-[#FFF5E8]/82 leading-relaxed line-clamp-2 h-[38px] sm:h-[42px] max-w-md mx-auto">
+                          {s.subtitle}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Locked-Height Crossfading Dish Visual + Callout Bar */}
+                <div className="relative h-[209px] sm:h-[232px] w-full max-w-[360px] mx-auto">
+                  {SLIDES.map((s, i) => {
+                    const active = i === idx;
+                    return (
+                      <div
+                        key={s.id}
+                        aria-hidden={!active}
+                        className={`absolute inset-0 rounded-[22px] overflow-hidden border border-white/15 bg-[#071D3B] shadow-lg transition-all duration-400 ease-out ${
+                          active
+                            ? "opacity-100 scale-100 z-10"
+                            : "opacity-0 scale-[0.97] pointer-events-none z-0"
+                        }`}
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={s.image}
+                          alt={s.productName}
+                          className="w-full h-full object-cover select-none"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#071D3B]/90 via-transparent to-black/20" />
+
+                        <span className="absolute top-2.5 right-2.5 rounded-full bg-[#FFC145] text-[#0B2D5C] px-3 py-0.5 text-[10.5px] font-black shadow-xs">
+                          {s.sticker}
+                        </span>
+
+                        <div className="absolute inset-x-2.5 bottom-2.5 flex items-center justify-between gap-2 rounded-2xl bg-[#0B2D5C]/92 backdrop-blur-xs border border-white/15 px-3 py-2">
+                          <div className="min-w-0 text-right">
+                            <div className="text-xs font-black text-white truncate">
+                              {s.calloutTitle}
+                            </div>
+                            <div className="text-[11px] font-extrabold text-[#FFC145] tabular-nums">
+                              {s.price} ج.م
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => handleQuickAdd(s)}
+                            className="shrink-0 rounded-full bg-[#FF6A00] text-white px-3 py-1.5 text-[11px] font-black inline-flex items-center gap-1 active:scale-95 transition cursor-pointer"
+                          >
+                            {addedId === s.id ? (
+                              <>
+                                <CheckIcon className="w-3.5 h-3.5" />
+                                <span>أُضيف</span>
+                              </>
+                            ) : (
+                              <>
+                                <PlusIcon className="w-3.5 h-3.5" />
+                                <span>أضف</span>
+                              </>
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Symmetrical 2-Column Mobile CTA Row */}
+                <div className="grid grid-cols-2 gap-2 pt-1">
+                  <Link
+                    href="/menu"
+                    className="rounded-full bg-[#FF6A00] hover:bg-[#CE2F08] text-white py-3 px-3 text-xs sm:text-sm font-black text-center shadow-md transition whitespace-nowrap"
+                  >
+                    اطلب من المنيو
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={openQr}
+                    className="rounded-full bg-[#FFF5E8] text-[#0B2D5C] py-3 px-3 text-xs sm:text-sm font-black inline-flex items-center justify-center gap-1.5 transition cursor-pointer whitespace-nowrap"
+                  >
+                    <QrCodeIcon className="w-4 h-4 text-[#FF6A00] shrink-0" />
+                    <span>باركود QR</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* =================================================================
+                DESKTOP SCULPTED BENTO CUTOUT OVERLAYS (`hidden lg:block`)
+                Placed OUTSIDE `overflow-hidden` so outer corners are NEVER clipped!
+                Concentric Radii:
+                  - Inner Card R = 20px, White Moat = 12px (`p-3`) => Cutout R = 32px
+                  - S-Curve Pills: Height 44px + 12px moat = 56px => R_convex 28 + R_concave 28 = 56px!
+               ================================================================= */}
+            <div dir="ltr" className="hidden lg:block pointer-events-none absolute inset-0 z-20">
+              {/* 1. TOP-LEFT STEPPED BENTO CUTOUT: Spotlight Card + 24/7 Pill */}
+              <div className="pointer-events-auto absolute top-0 left-0 flex items-start">
+                {/* 1A. Spotlight Thumbnail Cutout (`156x136`, R_card=20, Moat=12 => rounded-br-[32px]) */}
+                <div className="relative bg-white pr-3 pb-3 rounded-br-[32px]">
+                  <Link
+                    href={slide.secondaryHref}
+                    className="group relative block w-[156px] h-[136px] rounded-[20px] rounded-tl-[24px] overflow-hidden bg-[#071D3B] shadow-sm"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={slide.secondaryThumb}
+                      alt={slide.secondaryLabel}
+                      className="w-full h-full object-cover transition duration-500 group-hover:scale-108"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#071D3B]/90 via-transparent to-transparent" />
+                    <span
+                      dir="rtl"
+                      className="absolute inset-x-2 bottom-2 rounded-full bg-[#071D3B]/92 group-hover:bg-[#FF6A00] text-white py-1.5 px-2.5 text-[11px] font-black text-center truncate transition border border-white/12"
+                    >
+                      {slide.secondaryLabel}
+                    </span>
+                  </Link>
+                  {/* Bottom-left concave fillet where left navy wall meets thumbnail bottom */}
+                  <div className="absolute -bottom-6 left-0">
+                    <ConcaveTL size={24} />
+                  </div>
+                </div>
+
+                {/* 1B. Stepped Status Pill (`h-[44px]` + `pb-3` = `56px` => 28px + 28px Exact S-Curve!) */}
+                <div className="relative bg-white pr-3 pb-3 rounded-br-[28px]">
+                  <Link
+                    href="/delivery"
+                    dir="rtl"
+                    className="h-[44px] px-5 rounded-full bg-[#0B2D5C] hover:bg-[#FF6A00] text-[#FFF5E8] inline-flex items-center gap-2 text-xs font-black transition whitespace-nowrap"
+                  >
+                    <Truck24Icon className="w-4 h-4 text-[#FFC145]" />
+                    <span>{slide.sticker} • القاهرة الجديدة</span>
+                  </Link>
+                  {/* Top-right 28px concave fillet => Tangent S-curve with rounded-br-[28px] */}
+                  <div className="absolute top-0 -right-7">
+                    <ConcaveTL size={28} />
+                  </div>
+                  {/* Inner step concave fillet between Spotlight right wall and Pill bottom */}
+                  <div className="absolute -bottom-6 left-0">
+                    <ConcaveTL size={24} />
+                  </div>
+                </div>
+              </div>
+
+              {/* 2. TOP-RIGHT CATEGORY SWITCHER (`h-[44px]` + `pb-3` = `56px` => 28px + 28px Exact S-Curve!) */}
+              <div className="pointer-events-auto absolute top-0 right-0 bg-white pl-3 pb-3 rounded-bl-[28px]">
+                <div dir="rtl" className="grid grid-cols-3 gap-2">
+                  {SLIDES.map((s, i) => {
+                    const active = i === idx;
+                    return (
+                      <button
+                        key={s.id}
+                        type="button"
+                        onClick={() => setIdx(i)}
+                        className={`h-[44px] min-w-[96px] px-4 rounded-full text-xs font-black transition-all duration-300 cursor-pointer whitespace-nowrap ${
+                          active
+                            ? "bg-[#FF6A00] text-white shadow-[0_8px_18px_-6px_rgba(255,106,0,0.65)]"
+                            : "bg-[#0B2D5C] hover:bg-[#143A73] text-[#FFF5E8]"
+                        }`}
+                      >
+                        {s.tabLabel}
+                      </button>
+                    );
+                  })}
+                </div>
+                {/* Top-left 28px concave fillet => Tangent S-curve with rounded-bl-[28px] */}
+                <div className="absolute top-0 -left-7">
+                  <ConcaveTR size={28} />
+                </div>
+                {/* Right-wall 24px concave fillet below switcher */}
+                <div className="absolute -bottom-6 right-0">
+                  <ConcaveTR size={24} />
+                </div>
+              </div>
+
+              {/* 3. BOTTOM-LEFT BENTO INSET (`rounded-[20px]` + 12px moat => `rounded-tr-[32px]`) */}
+              <div className="pointer-events-auto absolute bottom-0 left-0 bg-white pr-3 pt-3 rounded-tr-[32px]">
                 <Link
-                  href="/points"
+                  href="/offers"
                   dir="rtl"
-                  className="group w-[230px] rounded-[22px] bg-[#FFF5E8] hover:bg-[#FFC145] border border-[#0B2D5C]/15 p-3.5 flex items-center justify-between gap-2.5 transition shadow-sm"
+                  className="group w-[236px] rounded-[20px] rounded-bl-[24px] bg-[#FFF5E8] hover:bg-[#FFC145] border border-[#0B2D5C]/14 p-3.5 flex items-center justify-between gap-2.5 transition"
                 >
                   <div className="min-w-0 text-right">
-                    <div className="font-en text-[11px] font-black text-[#FF6A00] group-hover:text-[#0B2D5C] tracking-wider">
-                      GIMMY POINTS
+                    <div className="font-en text-[10.5px] font-black text-[#FF6A00] group-hover:text-[#0B2D5C] tracking-wider">
+                      SPECIAL COMBOS
                     </div>
                     <div className="text-xs font-black text-[#0B2D5C] truncate mt-0.5">
-                      كل 100 ج = 5 نقاط مكافأة
+                      عروض وبوكسات التوفير
                     </div>
                   </div>
                   <span className="w-9 h-9 rounded-xl bg-[#0B2D5C] text-[#FFC145] grid place-items-center shrink-0">
                     <GiftPointsIcon className="w-4 h-4" />
                   </span>
                 </Link>
-                {/* Concave bridges */}
+                {/* Left-wall concave fillet above inset */}
                 <div className="absolute -top-6 left-0">
-                  <FilletBottomLeft />
+                  <ConcaveBL size={24} />
                 </div>
+                {/* Bottom-floor concave fillet to the right of inset */}
                 <div className="absolute bottom-0 -right-6">
-                  <FilletBottomLeft />
+                  <ConcaveBL size={24} />
                 </div>
-              </div>
-            </div>
-
-            {/* =================================================================
-                MOBILE & TABLET SCULPTED BENTO HERO (`lg:hidden`)
-                Strictly Locked Height (`0px Layout Shift`), Symmetrical Grids
-               ================================================================= */}
-            <div
-              dir="rtl"
-              className="lg:hidden h-full flex flex-col justify-between p-4 sm:p-6 relative z-10"
-            >
-              {/* Top Symmetrical 3-Column Category Switcher */}
-              <div className="grid grid-cols-3 gap-1.5 bg-white/10 p-1 rounded-full border border-white/12">
-                {SLIDES.map((s, i) => {
-                  const active = i === idx;
-                  return (
-                    <button
-                      key={s.id}
-                      type="button"
-                      onClick={() => setIdx(i)}
-                      className={`py-1.5 px-2 rounded-full text-xs font-black transition cursor-pointer truncate ${
-                        active
-                          ? "bg-[#FF6A00] text-white shadow-xs"
-                          : "text-[#FFF5E8]/85 hover:text-white"
-                      }`}
-                    >
-                      {s.tabLabel}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Locked-Height Headline & Subtitle */}
-              <div className="text-center mt-1">
-                <h1 className="text-[26px] sm:text-[34px] font-black leading-[1.26] text-white h-[68px] sm:h-[86px] flex flex-col justify-center">
-                  <span className="block whitespace-nowrap">{slide.headlineTop}</span>
-                  <span className="block text-[#FF6A00] whitespace-nowrap">
-                    {slide.headlineBottom}
-                  </span>
-                </h1>
-                <p className="mt-1.5 text-xs sm:text-sm font-bold text-[#FFF5E8]/82 leading-relaxed line-clamp-2 h-[38px] sm:h-[42px] max-w-md mx-auto">
-                  {slide.subtitle}
-                </p>
-              </div>
-
-              {/* Locked-Height Dish Visual + Callout Bar */}
-              <div className="relative h-[209px] sm:h-[232px] w-full max-w-[360px] mx-auto rounded-[24px] overflow-hidden border border-white/15 bg-[#071D3B] shadow-lg">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={slide.image}
-                  alt={slide.productName}
-                  className="w-full h-full object-cover select-none"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#071D3B]/90 via-transparent to-black/20" />
-
-                <span className="absolute top-2.5 right-2.5 rounded-full bg-[#FFC145] text-[#0B2D5C] px-3 py-0.5 text-[10.5px] font-black shadow-xs">
-                  {slide.sticker}
-                </span>
-
-                <div className="absolute inset-x-2.5 bottom-2.5 flex items-center justify-between gap-2 rounded-2xl bg-[#0B2D5C]/92 backdrop-blur-xs border border-white/15 px-3 py-2">
-                  <div className="min-w-0 text-right">
-                    <div className="text-xs font-black text-white truncate">
-                      {slide.calloutTitle}
-                    </div>
-                    <div className="text-[11px] font-extrabold text-[#FFC145] tabular-nums">
-                      {slide.price} ج.م
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={handleQuickAdd}
-                    className="shrink-0 rounded-full bg-[#FF6A00] text-white px-3 py-1.5 text-[11px] font-black inline-flex items-center gap-1 active:scale-95 transition cursor-pointer"
-                  >
-                    {addedId === slide.id ? (
-                      <>
-                        <CheckIcon className="w-3.5 h-3.5" />
-                        <span>أُضيف</span>
-                      </>
-                    ) : (
-                      <>
-                        <PlusIcon className="w-3.5 h-3.5" />
-                        <span>أضف</span>
-                      </>
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              {/* Symmetrical 2-Column Mobile CTA Row */}
-              <div className="grid grid-cols-2 gap-2 pt-1">
-                <Link
-                  href="/menu"
-                  className="rounded-full bg-[#FF6A00] hover:bg-[#CE2F08] text-white py-3 px-3 text-xs sm:text-sm font-black text-center shadow-md transition whitespace-nowrap"
-                >
-                  اطلب من المنيو
-                </Link>
-                <button
-                  type="button"
-                  onClick={openQr}
-                  className="rounded-full bg-[#FFF5E8] text-[#0B2D5C] py-3 px-3 text-xs sm:text-sm font-black inline-flex items-center justify-center gap-1.5 transition cursor-pointer whitespace-nowrap"
-                >
-                  <QrCodeIcon className="w-4 h-4 text-[#FF6A00] shrink-0" />
-                  <span>باركود QR</span>
-                </button>
               </div>
             </div>
           </div>
