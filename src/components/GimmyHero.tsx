@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { useStore } from "./store";
-import { CheckIcon, GiftPointsIcon, PlusIcon, QrCodeIcon, Truck24Icon } from "./icons";
+import { CheckIcon, PlusIcon, QrCodeIcon, TagIcon, Truck24Icon } from "./icons";
 
 interface HeroSlide {
   id: string;
@@ -274,26 +274,26 @@ export default function GimmyHero() {
                     <span>مطعم جيمي كوك</span>
                   </div>
 
-                  {/* Smooth Crossfading Text Stack (Zero Height Shift) */}
-                  <div className="relative mt-4 h-[176px] xl:h-[198px]">
+                  {/* Smooth Crossfading Text Stack (Zero Height Shift + Generous Line Spacing) */}
+                  <div className="relative mt-4 h-[196px] xl:h-[220px]">
                     {SLIDES.map((s, i) => {
                       const active = i === idx;
                       return (
                         <div
                           key={s.id}
                           aria-hidden={!active}
-                          className={`absolute inset-0 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                          className={`absolute inset-0 ease-[cubic-bezier(0.22,1,0.36,1)] ${
                             active
-                              ? "opacity-100 translate-y-0 z-10"
-                              : "opacity-0 translate-y-2 pointer-events-none z-0"
+                              ? "opacity-100 translate-y-0 transition-all duration-350 delay-75 z-10"
+                              : "opacity-0 translate-y-1.5 transition-all duration-150 pointer-events-none z-0"
                           }`}
                         >
                           <p className="text-sm xl:text-base font-bold text-[#FFF5E8]/82 leading-relaxed max-w-lg h-[48px] line-clamp-2">
                             {s.subtitle}
                           </p>
-                          <h1 className="mt-3 text-[40px] xl:text-[50px] font-black leading-[1.24] tracking-tight text-white">
+                          <h1 className="mt-3 text-[38px] xl:text-[46px] font-black leading-[1.42] tracking-normal text-white">
                             <span className="block whitespace-nowrap">{s.headlineTop}</span>
-                            <span className="block text-[#FF6A00] mt-1.5 whitespace-nowrap">
+                            <span className="block text-[#FF6A00] mt-2 whitespace-nowrap">
                               {s.headlineBottom}
                             </span>
                           </h1>
@@ -366,27 +366,27 @@ export default function GimmyHero() {
                   })}
                 </div>
 
-                {/* Locked-Height Crossfading Headline & Subtitle */}
-                <div className="relative h-[112px] sm:h-[134px] mt-1">
+                {/* Locked-Height Crossfading Headline & Subtitle (Generous Arabic Line Clearance) */}
+                <div className="relative h-[132px] sm:h-[154px] mt-1">
                   {SLIDES.map((s, i) => {
                     const active = i === idx;
                     return (
                       <div
                         key={s.id}
                         aria-hidden={!active}
-                        className={`absolute inset-0 text-center transition-all duration-400 ease-out ${
+                        className={`absolute inset-0 text-center ease-out ${
                           active
-                            ? "opacity-100 translate-y-0 z-10"
-                            : "opacity-0 translate-y-1.5 pointer-events-none z-0"
+                            ? "opacity-100 translate-y-0 transition-all duration-300 delay-75 z-10"
+                            : "opacity-0 translate-y-1 transition-all duration-150 pointer-events-none z-0"
                         }`}
                       >
-                        <h1 className="text-[26px] sm:text-[34px] font-black leading-[1.26] text-white h-[68px] sm:h-[86px] flex flex-col justify-center">
+                        <h1 className="text-[25px] sm:text-[32px] font-black leading-[1.42] text-white h-[82px] sm:h-[100px] flex flex-col justify-center">
                           <span className="block whitespace-nowrap">{s.headlineTop}</span>
-                          <span className="block text-[#FF6A00] whitespace-nowrap">
+                          <span className="block text-[#FF6A00] mt-1.5 whitespace-nowrap">
                             {s.headlineBottom}
                           </span>
                         </h1>
-                        <p className="mt-1.5 text-xs sm:text-sm font-bold text-[#FFF5E8]/82 leading-relaxed line-clamp-2 h-[38px] sm:h-[42px] max-w-md mx-auto">
+                        <p className="mt-2 text-xs sm:text-sm font-bold text-[#FFF5E8]/82 leading-relaxed line-clamp-2 h-[40px] sm:h-[44px] max-w-md mx-auto">
                           {s.subtitle}
                         </p>
                       </div>
@@ -395,7 +395,7 @@ export default function GimmyHero() {
                 </div>
 
                 {/* Locked-Height Crossfading Dish Visual + Callout Bar */}
-                <div className="relative h-[209px] sm:h-[232px] w-full max-w-[360px] mx-auto">
+                <div className="relative h-[194px] sm:h-[216px] w-full max-w-[360px] mx-auto">
                   {SLIDES.map((s, i) => {
                     const active = i === idx;
                     return (
@@ -576,7 +576,7 @@ export default function GimmyHero() {
                     </div>
                   </div>
                   <span className="w-9 h-9 rounded-xl bg-[#0B2D5C] text-[#FFC145] grid place-items-center shrink-0">
-                    <GiftPointsIcon className="w-4 h-4" />
+                    <TagIcon className="w-4 h-4" />
                   </span>
                 </Link>
                 {/* Left-wall concave fillet above inset */}

@@ -52,7 +52,7 @@ const MenuChapters = memo(function MenuChapters({
   setSectionRef: (id: string, el: HTMLElement | null) => void;
 }) {
   return (
-    <div className="space-y-7 min-w-0 w-full max-w-full">
+    <div className="space-y-6 sm:space-y-7 min-w-0 w-full max-w-full">
       {visibleCats.map((c, idx) => {
         const items = filtered.filter((p) => p.categoryId === c.id);
         const desc =
@@ -63,7 +63,7 @@ const MenuChapters = memo(function MenuChapters({
             key={c.id}
             id={`cat-${c.id}`}
             ref={(el) => setSectionRef(c.id, el)}
-            className="scroll-mt-36 sm:scroll-mt-40 w-full max-w-full min-w-0 overflow-hidden bg-white rounded-[28px] sm:rounded-[32px] p-4 sm:p-6 border border-[#0B2D5C]/10 shadow-[0_12px_32px_-18px_rgba(7,29,59,0.12)]"
+            className="scroll-mt-36 sm:scroll-mt-40 w-full max-w-full min-w-0 overflow-hidden bg-white rounded-[28px] sm:rounded-[32px] p-4 sm:p-6 border border-[#0B2D5C]/10 shadow-[0_10px_28px_-16px_rgba(11,45,92,0.1)]"
           >
             {/* Clean Editorial Chapter Header */}
             <div className="flex items-center gap-3.5 sm:gap-4 mb-5 pb-4 border-b border-[#0B2D5C]/10 min-w-0">
@@ -73,6 +73,7 @@ const MenuChapters = memo(function MenuChapters({
                   src={c.image}
                   alt={c.nameAr}
                   loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -85,7 +86,7 @@ const MenuChapters = memo(function MenuChapters({
                   >
                     0{idx + 1}
                   </span>
-                  <h2 className="text-lg sm:text-2xl font-black text-[#0B2D5C] leading-[1.3]">
+                  <h2 className="text-lg sm:text-2xl font-black text-[#0B2D5C] leading-[1.4]">
                     {c.nameAr}
                   </h2>
                   <span className="rounded-full bg-[#FFF5E8] border border-[#0B2D5C]/10 px-2.5 py-0.5 text-[11px] font-extrabold text-[#0B2D5C]/75">
@@ -140,17 +141,17 @@ export default function MenuClient({
   const isJumpingRef = useRef(false);
   const jumpTargetYRef = useRef<number | null>(null);
   const jumpTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const pillRafRef = useRef<number>(0);
 
-  // Desktop mouse drag state for smooth horizontal category swiping
+  // Cooldown timestamp so vertical scroll-spy NEVER fights manual strip swiping/momentum
+  const lastManualStripAtRef = useRef(0);
+
+  // Desktop mouse drag state (1:1 cursor tracking with `scroll-behavior: auto`)
   const dragStateRef = useRef<{
     active: boolean;
     moved: boolean;
     startX: number;
     startScrollLeft: number;
   }>({ active: false, moved: false, startX: 0, startScrollLeft: 0 });
-  const isUserInteractingStripRef = useRef(false);
-  const stripTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { branch, openPicker, hydrated } = useStore();
 
@@ -207,54 +208,37 @@ export default function MenuClient({
     return map;
   }, [filtered]);
 
-  /** Smooth 60fps centering of active pill inside horizontal category rail */
+  /**
+   * Native GPU-Compositor Pill Centering:
+   * Uses native `scrollBy({ behavior: "smooth" })` instead of main-thread JS RAF loops,
+   * so scrolling stays 120fps and never fights touch momentum.
+   */
   const centerActivePill = useCallback((catId: string, immediate = false) => {
     const box = pillsRef.current;
     const pill = box?.querySelector<HTMLElement>(`[data-cat="${catId}"]`);
     if (!box || !pill) return;
-
-    if (pillRafRef.current) {
-      cancelAnimationFrame(pillRafRef.current);
-      pillRafRef.current = 0;
-    }
 
     const boxRect = box.getBoundingClientRect();
     const pillRect = pill.getBoundingClientRect();
     const delta =
       pillRect.left + pillRect.width * 0.5 - (boxRect.left + boxRect.width * 0.5);
 
-    if (Math.abs(delta) < 2) return;
+    if (Math.abs(delta) < 10) return;
 
-    const startScrollLeft = box.scrollLeft;
-    if (immediate) {
-      box.scrollLeft = startScrollLeft + delta;
-      return;
-    }
-
-    const startTime = performance.now();
-    const duration = 280;
-
-    const step = (now: number) => {
-      if (isUserInteractingStripRef.current) {
-        pillRafRef.current = 0;
-        return;
-      }
-      const t = Math.min(1, (now - startTime) / duration);
-      // Smooth cubic-out curve
-      const eased = 1 - Math.pow(1 - t, 3);
-      box.scrollLeft = startScrollLeft + delta * eased;
-
-      if (t < 1) {
-        pillRafRef.current = requestAnimationFrame(step);
-      } else {
-        pillRafRef.current = 0;
-      }
-    };
-    pillRafRef.current = requestAnimationFrame(step);
+    box.scrollBy({
+      left: delta,
+      behavior: immediate ? "auto" : "smooth",
+    });
   }, []);
 
   useEffect(() => {
-    if (!activeCat || isUserInteractingStripRef.current) return;
+    if (
+      !activeCat ||
+      dragStateRef.current.active ||
+      performance.now() - lastManualStripAtRef.current < 1500
+    ) {
+      return;
+    }
     centerActivePill(activeCat, false);
   }, [activeCat, visibleCats, centerActivePill]);
 
@@ -263,8 +247,8 @@ export default function MenuClient({
       const timer = setTimeout(() => {
         const el = sectionRefs.current[initialCat];
         if (!el) return;
-        const stickyBottom = stickyBarRef.current?.getBoundingClientRect().bottom ?? 138;
-        const top = window.scrollY + el.getBoundingClientRect().top - stickyBottom - 16;
+        const stickyBottom = stickyBarRef.current?.getBoundingClientRect().bottom ?? 132;
+        const top = window.scrollY + el.getBoundingClientRect().top - stickyBottom - 14;
         window.scrollTo({
           top: Math.max(0, top),
           behavior: "smooth",
@@ -290,10 +274,9 @@ export default function MenuClient({
 
     const onScroll = () => {
       if (isJumpingRef.current) {
-        // Release cleanly once browser reaches target scroll position
         if (
           jumpTargetYRef.current !== null &&
-          Math.abs(window.scrollY - jumpTargetYRef.current) < 10
+          Math.abs(window.scrollY - jumpTargetYRef.current) < 12
         ) {
           releaseProgrammaticJump();
         }
@@ -304,9 +287,10 @@ export default function MenuClient({
 
       window.requestAnimationFrame(() => {
         const stickyBottom =
-          stickyBarRef.current?.getBoundingClientRect().bottom ?? 138;
-        const triggerLine = stickyBottom + 28;
-        const hysteresis = 24;
+          stickyBarRef.current?.getBoundingClientRect().bottom ?? 132;
+        // Generous reading-zone trigger line so visible top chapter highlights immediately
+        const triggerLine = stickyBottom + 96;
+        const hysteresis = 16;
         const prevId = activeCatRef.current;
         let candidateId = visibleCats[0].id;
 
@@ -367,8 +351,6 @@ export default function MenuClient({
       window.removeEventListener("wheel", releaseProgrammaticJump);
       window.removeEventListener("touchmove", releaseProgrammaticJump);
       if (jumpTimerRef.current) clearTimeout(jumpTimerRef.current);
-      if (stripTimerRef.current) clearTimeout(stripTimerRef.current);
-      if (pillRafRef.current) cancelAnimationFrame(pillRafRef.current);
     };
   }, [visibleCats]);
 
@@ -377,17 +359,17 @@ export default function MenuClient({
     const el = sectionRefs.current[id];
     if (!el) return;
 
-    isUserInteractingStripRef.current = false;
+    lastManualStripAtRef.current = 0;
     isJumpingRef.current = true;
     activeCatRef.current = id;
     setActiveCat(id);
     centerActivePill(id, false);
     if (jumpTimerRef.current) clearTimeout(jumpTimerRef.current);
 
-    const stickyBottom = stickyBarRef.current?.getBoundingClientRect().bottom ?? 138;
+    const stickyBottom = stickyBarRef.current?.getBoundingClientRect().bottom ?? 132;
     const targetTop = Math.max(
       0,
-      window.scrollY + el.getBoundingClientRect().top - stickyBottom - 16,
+      window.scrollY + el.getBoundingClientRect().top - stickyBottom - 14,
     );
     jumpTargetYRef.current = targetTop;
 
@@ -396,47 +378,31 @@ export default function MenuClient({
       behavior: "smooth",
     });
 
-    // Safety fallback for browsers without `scrollend` over long distances
     jumpTimerRef.current = setTimeout(() => {
       isJumpingRef.current = false;
       jumpTargetYRef.current = null;
-    }, 1250);
+    }, 1100);
   };
 
-  /** Smooth horizontal glide via desktop arrow buttons */
+  /** Native compositor horizontal glide via desktop arrow buttons */
   const nudgeStrip = (dir: "right" | "left") => {
     const box = pillsRef.current;
     if (!box) return;
-    isUserInteractingStripRef.current = true;
-    if (stripTimerRef.current) clearTimeout(stripTimerRef.current);
+    lastManualStripAtRef.current = performance.now();
+    box.scrollBy({
+      left: dir === "right" ? 240 : -240,
+      behavior: "smooth",
+    });
+  };
 
-    const start = box.scrollLeft;
-    const delta = dir === "right" ? 240 : -240;
-    const startTime = performance.now();
-    const duration = 260;
-
-    if (pillRafRef.current) cancelAnimationFrame(pillRafRef.current);
-    const animate = (now: number) => {
-      const t = Math.min(1, (now - startTime) / duration);
-      const eased = 1 - Math.pow(1 - t, 3);
-      box.scrollLeft = start + delta * eased;
-      if (t < 1) {
-        pillRafRef.current = requestAnimationFrame(animate);
-      } else {
-        pillRafRef.current = 0;
-      }
-    };
-    pillRafRef.current = requestAnimationFrame(animate);
-
-    stripTimerRef.current = setTimeout(() => {
-      isUserInteractingStripRef.current = false;
-    }, 500);
+  const markManualStrip = () => {
+    lastManualStripAtRef.current = performance.now();
   };
 
   return (
-    <div className="mx-auto max-w-7xl px-3.5 sm:px-6 lg:px-8 py-5 w-full min-w-0">
+    <div className="mx-auto max-w-7xl px-3.5 sm:px-6 lg:px-8 py-4 sm:py-5 w-full min-w-0">
       {/* Search + View Switcher + Filter Bar */}
-      <div className="bg-white rounded-[26px] p-3.5 sm:p-4 border border-[#0B2D5C]/10 shadow-[0_12px_30px_-16px_rgba(7,29,59,0.12)] space-y-3">
+      <div className="bg-white rounded-[26px] p-3.5 sm:p-4 border border-[#0B2D5C]/10 shadow-[0_10px_26px_-16px_rgba(11,45,92,0.1)] space-y-3 mb-2">
         <div className="flex flex-col sm:flex-row gap-2.5 items-stretch sm:items-center justify-between">
           {/* Search Input */}
           <div className="relative flex-1 min-w-0">
@@ -466,10 +432,10 @@ export default function MenuClient({
               <button
                 type="button"
                 onClick={() => setView("menu")}
-                className={`rounded-full px-3.5 py-1.5 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer ${
+                className={`rounded-full px-3.5 py-1.5 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-colors duration-200 cursor-pointer ${
                   view === "menu"
-                    ? "bg-[#071D3B] text-white shadow-xs"
-                    : "text-[#071D3B]/75 hover:text-[#FF6A00]"
+                    ? "bg-[#0B2D5C] text-white shadow-2xs"
+                    : "text-[#0B2D5C]/75 hover:text-[#FF6A00]"
                 }`}
               >
                 <ListIcon className="w-3.5 h-3.5 shrink-0" />
@@ -478,10 +444,10 @@ export default function MenuClient({
               <button
                 type="button"
                 onClick={() => setView("grid")}
-                className={`rounded-full px-3.5 py-1.5 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer ${
+                className={`rounded-full px-3.5 py-1.5 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-colors duration-200 cursor-pointer ${
                   view === "grid"
-                    ? "bg-[#071D3B] text-white shadow-xs"
-                    : "text-[#071D3B]/75 hover:text-[#FF6A00]"
+                    ? "bg-[#0B2D5C] text-white shadow-2xs"
+                    : "text-[#0B2D5C]/75 hover:text-[#FF6A00]"
                 }`}
               >
                 <GridIcon className="w-3.5 h-3.5 shrink-0" />
@@ -493,7 +459,7 @@ export default function MenuClient({
               <button
                 type="button"
                 onClick={openPicker}
-                className="shrink-0 inline-flex items-center gap-1.5 rounded-full bg-[#FFF5E8] hover:bg-[#FFC145] border border-[#0B2D5C]/14 px-3.5 py-2 text-[11px] font-black text-[#0B2D5C] transition cursor-pointer"
+                className="shrink-0 inline-flex items-center gap-1.5 rounded-full bg-[#FFF5E8] hover:bg-[#FFC145] border border-[#0B2D5C]/14 px-3.5 py-2 text-[11px] font-black text-[#0B2D5C] transition-colors cursor-pointer"
               >
                 <PinIcon className="w-3.5 h-3.5 text-[#FF6A00] shrink-0" />
                 <span>{branch.city}</span>
@@ -511,10 +477,10 @@ export default function MenuClient({
                 key={f.id}
                 type="button"
                 onClick={() => setFilter(f.id)}
-                className={`shrink-0 rounded-full px-4 py-1.5 text-xs font-black border transition-all duration-200 cursor-pointer ${
+                className={`shrink-0 rounded-full px-4 py-1.5 text-xs font-black border transition-colors duration-200 cursor-pointer ${
                   active
-                    ? "bg-[#FF6A00] text-white border-[#FF6A00] shadow-xs"
-                    : "bg-[#FFF5E8]/80 text-[#071D3B]/80 border-[#0B2D5C]/10 hover:border-[#FF6A00]"
+                    ? "bg-[#FF6A00] text-white border-[#FF6A00] shadow-2xs"
+                    : "bg-[#FFF5E8]/80 text-[#0B2D5C]/80 border-[#0B2D5C]/10 hover:border-[#FF6A00]"
                 }`}
               >
                 {f.label}
@@ -525,79 +491,76 @@ export default function MenuClient({
       </div>
 
       {/* =====================================================================
-          SCULPTED STICKY CATEGORY CAPSULE RAIL (`top-[64px] sm:top-[74px]`)
-          Exact alignment below Header + Desktop Drag + Arrow Gliders + 60fps Centering
+          SEAMLESS LIGHT-MODE STICKY CATEGORY DOCK (`top-[64px] sm:top-[74px]`)
+          - Flush solid `#FFF5E8` dock directly beneath `<Header>` (ZERO peek-through gap!)
+          - Crisp white capsule rail (`bg-white`) matching Light Mode
+          - Native GPU-compositor momentum scrolling (`touch-pan-x`)
          ===================================================================== */}
       <div
         ref={stickyBarRef}
-        className="sticky top-[64px] sm:top-[74px] z-30 pt-2.5 pb-2"
+        className="sticky top-[64px] sm:top-[74px] z-30 -mx-3.5 px-3.5 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 py-2 bg-[#FFF5E8] border-b border-[#0B2D5C]/10 shadow-[0_10px_24px_-18px_rgba(11,45,92,0.16)]"
       >
-        <div className="rounded-2xl sm:rounded-full bg-[#071D3B]/95 backdrop-blur-md p-1.5 border border-white/10 shadow-[0_16px_36px_-14px_rgba(7,29,59,0.42)] flex items-center gap-1.5">
+        <div className="rounded-full bg-white p-1.5 border border-[#0B2D5C]/12 shadow-[0_6px_18px_-10px_rgba(11,45,92,0.1)] flex items-center gap-1.5">
           {/* Desktop Scroll-Right Button (RTL Start) */}
           <button
             type="button"
             onClick={() => nudgeStrip("right")}
             aria-label="التمرير لليمين"
-            className="hidden md:grid w-8 h-8 rounded-full bg-white/[0.08] hover:bg-[#FF6A00] text-[#FFF5E8] place-items-center shrink-0 transition cursor-pointer"
+            className="hidden md:grid w-8 h-8 rounded-full bg-[#FFF5E8] hover:bg-[#FF6A00] text-[#0B2D5C] hover:text-white border border-[#0B2D5C]/10 place-items-center shrink-0 transition-colors cursor-pointer"
           >
             <ChevronIcon className="w-4 h-4 rotate-180" />
           </button>
 
-          {/* Draggable & Swipeable Category Track */}
+          {/* Native-Momentum Horizontal Category Track */}
           <div
             ref={pillsRef}
-            onTouchStart={() => {
-              isUserInteractingStripRef.current = true;
-              if (stripTimerRef.current) clearTimeout(stripTimerRef.current);
-            }}
-            onTouchEnd={() => {
-              if (stripTimerRef.current) clearTimeout(stripTimerRef.current);
-              stripTimerRef.current = setTimeout(() => {
-                isUserInteractingStripRef.current = false;
-              }, 450);
+            onTouchStart={markManualStrip}
+            onTouchMove={markManualStrip}
+            onTouchEnd={markManualStrip}
+            onWheel={(e) => {
+              if (Math.abs(e.deltaX) > 2) markManualStrip();
             }}
             onMouseDown={(e) => {
               const box = pillsRef.current;
               if (!box) return;
+              markManualStrip();
               dragStateRef.current = {
                 active: true,
                 moved: false,
                 startX: e.clientX,
                 startScrollLeft: box.scrollLeft,
               };
-              isUserInteractingStripRef.current = true;
             }}
             onMouseMove={(e) => {
               const st = dragStateRef.current;
               const box = pillsRef.current;
               if (!st.active || !box) return;
               const dx = e.clientX - st.startX;
-              if (Math.abs(dx) > 5) st.moved = true;
+              if (Math.abs(dx) > 5) {
+                st.moved = true;
+                box.style.scrollBehavior = "auto";
+              }
               if (st.moved) {
                 e.preventDefault();
+                markManualStrip();
                 box.scrollLeft = st.startScrollLeft - dx;
               }
             }}
             onMouseUp={() => {
+              const box = pillsRef.current;
+              if (box) box.style.scrollBehavior = "";
               dragStateRef.current.active = false;
               setTimeout(() => {
                 dragStateRef.current.moved = false;
-                isUserInteractingStripRef.current = false;
-              }, 80);
+              }, 60);
             }}
             onMouseLeave={() => {
+              const box = pillsRef.current;
+              if (box) box.style.scrollBehavior = "";
               dragStateRef.current.active = false;
               dragStateRef.current.moved = false;
-              isUserInteractingStripRef.current = false;
             }}
-            onWheel={(e) => {
-              const box = pillsRef.current;
-              if (!box || Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
-              if (box.scrollWidth > box.clientWidth) {
-                box.scrollLeft -= e.deltaY * 0.7;
-              }
-            }}
-            className="flex-1 flex items-center gap-1.5 overflow-x-auto no-scrollbar select-none cursor-grab active:cursor-grabbing px-0.5"
+            className="flex-1 flex items-center gap-1.5 overflow-x-auto no-scrollbar touch-pan-x overscroll-x-contain select-none cursor-grab active:cursor-grabbing px-0.5"
           >
             {visibleCats.map((c) => {
               const active = activeCat === c.id;
@@ -607,18 +570,18 @@ export default function MenuClient({
                   type="button"
                   data-cat={c.id}
                   onClick={() => jump(c.id)}
-                  className={`shrink-0 rounded-xl sm:rounded-full px-3.5 sm:px-4 py-2 text-xs sm:text-[13px] font-extrabold inline-flex items-center gap-2 transition-all duration-250 cursor-pointer ${
+                  className={`shrink-0 rounded-full px-3.5 sm:px-4 py-2 text-xs sm:text-[13px] font-extrabold inline-flex items-center gap-2 transition-colors duration-200 cursor-pointer ${
                     active
-                      ? "bg-[#FF6A00] text-white shadow-[0_6px_16px_-4px_rgba(255,106,0,0.65)]"
-                      : "text-[#FFF5E8]/80 hover:text-white hover:bg-white/[0.08]"
+                      ? "bg-[#FF6A00] text-white shadow-[0_6px_16px_-4px_rgba(255,106,0,0.48)]"
+                      : "bg-transparent text-[#0B2D5C] hover:bg-[#FFF5E8] hover:text-[#FF6A00]"
                   }`}
                 >
                   <span>{c.nameAr}</span>
                   <span
                     className={`rounded-full px-1.5 py-0.2 text-[10px] font-black tabular-nums transition-colors ${
                       active
-                        ? "bg-white/22 text-white"
-                        : "bg-white/10 text-[#FFC145]"
+                        ? "bg-white/25 text-white"
+                        : "bg-[#FFF5E8] text-[#0B2D5C]/70"
                     }`}
                   >
                     {catCounts[c.id] || 0}
@@ -633,7 +596,7 @@ export default function MenuClient({
             type="button"
             onClick={() => nudgeStrip("left")}
             aria-label="التمرير لليسار"
-            className="hidden md:grid w-8 h-8 rounded-full bg-white/[0.08] hover:bg-[#FF6A00] text-[#FFF5E8] place-items-center shrink-0 transition cursor-pointer"
+            className="hidden md:grid w-8 h-8 rounded-full bg-[#FFF5E8] hover:bg-[#FF6A00] text-[#0B2D5C] hover:text-white border border-[#0B2D5C]/10 place-items-center shrink-0 transition-colors cursor-pointer"
           >
             <ChevronIcon className="w-4 h-4" />
           </button>

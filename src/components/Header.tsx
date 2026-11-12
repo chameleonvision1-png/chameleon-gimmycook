@@ -184,12 +184,12 @@ export default function Header() {
   return (
     <>
       {/* =========================================================================
-          TOP STICKY BAR (`dir="ltr"`):
+          TOP STICKY BAR (`dir="ltr"` — 100% CRISP LIGHT MODE):
           - Far Left (شمال): Standalone `G` Icon ONLY on all pages; Horizontal Logo ONLY on `/menu`
-          - Center (Desktop): Sculpted Deep-Navy Capsule Nav
+          - Center (Desktop): Sculpted Light-Mode White Capsule Nav
           - Far Right (يمين): Cart Pill + Menu Burger Button (≡) ALWAYS Far Right
          ========================================================================= */}
-      <header className="sticky top-0 z-50 bg-[#FFF5E8]/95 backdrop-blur-md border-b border-[#0B2D5C]/10">
+      <header className="sticky top-0 z-50 bg-[#FFF5E8]/98 border-b border-[#0B2D5C]/10">
         <div
           dir="ltr"
           className="mx-auto max-w-7xl px-3.5 sm:px-6 lg:px-8 h-[64px] sm:h-[74px] flex items-center justify-between gap-3"
@@ -217,11 +217,11 @@ export default function Header() {
             )}
           </Link>
 
-          {/* CENTER (Desktop Only): Architectural Deep-Navy Capsule Nav */}
+          {/* CENTER (Desktop Only): Crisp Light-Mode Capsule Nav */}
           <nav
             dir="rtl"
             aria-label="التنقل الرئيسي"
-            className="hidden lg:flex items-center justify-center gap-1 bg-[#071D3B] text-[#FFF5E8] rounded-full p-1.5 border border-[#0B2D5C]/25 shadow-[0_12px_28px_-12px_rgba(7,29,59,0.45)]"
+            className="hidden lg:flex items-center justify-center gap-1 bg-white text-[#0B2D5C] rounded-full p-1.5 border border-[#0B2D5C]/12 shadow-[0_8px_24px_-12px_rgba(11,45,92,0.12)]"
           >
             {TOP_NAV.map((item) => {
               const active =
@@ -232,10 +232,10 @@ export default function Header() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`px-4 py-1.5 rounded-full text-xs font-extrabold transition-all duration-250 whitespace-nowrap ${
+                  className={`px-4 py-1.5 rounded-full text-xs font-extrabold transition-colors duration-200 whitespace-nowrap ${
                     active
-                      ? "bg-[#FF6A00] text-white shadow-[0_6px_14px_-4px_rgba(255,106,0,0.65)]"
-                      : "text-[#FFF5E8]/80 hover:text-white hover:bg-white/[0.08]"
+                      ? "bg-[#FF6A00] text-white shadow-[0_6px_14px_-4px_rgba(255,106,0,0.5)]"
+                      : "text-[#0B2D5C]/80 hover:text-[#FF6A00] hover:bg-[#FFF5E8]"
                   }`}
                 >
                   {item.label}
@@ -250,10 +250,10 @@ export default function Header() {
               href="/cart"
               dir="rtl"
               aria-label="سلة الطلبات"
-              className="hidden sm:inline-flex items-center gap-2 rounded-full bg-white hover:bg-[#071D3B] text-[#0B2D5C] hover:text-white border border-[#0B2D5C]/15 px-4 py-2 text-xs font-extrabold transition-all duration-200 shadow-2xs group"
+              className="hidden sm:inline-flex items-center gap-2 rounded-full bg-white hover:bg-[#0B2D5C] text-[#0B2D5C] hover:text-white border border-[#0B2D5C]/14 px-4 py-2 text-xs font-extrabold transition-colors duration-200 shadow-2xs group"
             >
               <span className="relative">
-                <CartIcon className="w-4 h-4 text-[#FF6A00]" />
+                <CartIcon className="w-4 h-4 text-[#FF6A00] group-hover:text-[#FFC145]" />
                 {hydrated && count > 0 && (
                   <span
                     key={bump}
@@ -277,7 +277,7 @@ export default function Header() {
               onClick={openDrawer}
               aria-label="فتح القائمة الجانبية"
               aria-expanded={drawerOpen}
-              className="w-11 h-11 rounded-full bg-[#FF6A00] hover:bg-[#071D3B] text-white grid place-items-center shadow-[0_8px_20px_-6px_rgba(255,106,0,0.55)] transition-all duration-200 active:scale-95 cursor-pointer"
+              className="w-11 h-11 rounded-full bg-[#FF6A00] hover:bg-[#0B2D5C] text-white grid place-items-center shadow-[0_8px_20px_-6px_rgba(255,106,0,0.5)] transition-colors duration-200 active:scale-95 cursor-pointer"
             >
               <MenuIcon className="w-5 h-5" />
             </button>
@@ -286,9 +286,10 @@ export default function Header() {
       </header>
 
       {/* =========================================================================
-          ARCHITECTURAL RIGHT-SIDE SLIDE-OVER DRAWER (`الشريط الجانبي`)
+          LIGHT-MODE ARCHITECTURAL RIGHT-SIDE SLIDE-OVER DRAWER (`الشريط الجانبي`)
           - Outer wrapper uses `dir="ltr"` + `right-0` so it ALWAYS slides from RIGHT (`يمين`)!
-          - Kept mounted when `hydrated` so open/close glides smoothly at 60fps.
+          - Pure Light Mode (`bg-white` + `#FFF5E8` warm accents) matching the website!
+          - `no-scrollbar` on scrollable body so ugly Windows scrollbars NEVER appear!
          ========================================================================= */}
       {hydrated &&
         typeof document !== "undefined" &&
@@ -300,34 +301,28 @@ export default function Header() {
               drawerOpen ? "pointer-events-auto visible" : "pointer-events-none invisible delay-300"
             }`}
           >
-            {/* Frosted Dark Backdrop */}
+            {/* Soft Airy Scrim */}
             <div
               onClick={closeDrawer}
-              className={`absolute inset-0 bg-[#041024]/65 backdrop-blur-sm transition-opacity duration-300 ease-out touch-none ${
+              className={`absolute inset-0 bg-[#0B2D5C]/30 backdrop-blur-[2px] transition-opacity duration-300 ease-out touch-none ${
                 drawerOpen ? "opacity-100" : "opacity-0"
               }`}
             />
 
-            {/* Right-Anchored EditorialMidnight-Navy Panel (`right-0`) */}
+            {/* Right-Anchored Crisp Light-Mode Panel (`right-0`) */}
             <aside
               dir="rtl"
               role="dialog"
               aria-modal="true"
               aria-label="القائمة الجانبية — مطعم جيمي كوك GIMMY COOK"
-              className={`fixed top-0 right-0 bottom-0 z-10 w-[88vw] max-w-[400px] bg-[#071D3B] text-[#FFF5E8] shadow-[-24px_0_64px_rgba(3,12,26,0.65)] border-l border-white/10 flex flex-col overflow-hidden transition-transform duration-350 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform ${
+              className={`fixed top-0 right-0 bottom-0 z-10 w-[88vw] max-w-[400px] bg-white text-[#071D3B] shadow-[-20px_0_54px_-12px_rgba(11,45,92,0.2)] border-l border-[#0B2D5C]/12 flex flex-col overflow-hidden transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform ${
                 drawerOpen ? "translate-x-0" : "translate-x-full"
               }`}
             >
-              {/* Subtle Ambient Brand Glow */}
-              <div
-                className="pointer-events-none absolute -top-24 -right-24 w-72 h-72 rounded-full bg-[#FF6A00]/18 blur-3xl"
-                aria-hidden="true"
-              />
-
-              {/* 1. Top Bar (`dir="ltr"`): Logo on Left, Close (`✕`) on Far Right matching Header `≡` */}
+              {/* 1. Top Bar (`dir="ltr"`): Full-Color Logo on Left, Close (`✕`) on Far Right */}
               <div
                 dir="ltr"
-                className="relative z-10 shrink-0 h-[64px] sm:h-[74px] px-4 sm:px-5 flex items-center justify-between border-b border-white/10"
+                className="relative z-10 shrink-0 h-[64px] sm:h-[74px] px-4 sm:px-5 flex items-center justify-between bg-[#FFF5E8]/75 border-b border-[#0B2D5C]/10"
               >
                 <Link
                   href="/"
@@ -336,7 +331,7 @@ export default function Header() {
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src="/logo-horizontal-light.webp"
+                    src="/logo-horizontal.webp"
                     alt="GIMMY COOK"
                     className="h-7 sm:h-8 w-auto object-contain select-none"
                   />
@@ -346,32 +341,32 @@ export default function Header() {
                   type="button"
                   onClick={closeDrawer}
                   aria-label="إغلاق القائمة"
-                  className="w-10 h-10 rounded-full bg-white/10 hover:bg-[#FF6A00] text-white grid place-items-center transition-colors duration-200 cursor-pointer shrink-0"
+                  className="w-10 h-10 rounded-full bg-white hover:bg-[#FF6A00] text-[#0B2D5C] hover:text-white border border-[#0B2D5C]/12 grid place-items-center transition-colors duration-200 cursor-pointer shrink-0 shadow-2xs"
                 >
                   <CloseIcon className="w-4 h-4" />
                 </button>
               </div>
 
-              {/* 2. Scrollable Editorial Navigation Body */}
+              {/* 2. Scrollable Light-Mode Navigation Body (`no-scrollbar` hides native scrollbar) */}
               <div
                 data-modal-scroll
-                className="relative z-10 flex-1 overflow-y-auto overscroll-contain touch-pan-y px-4 sm:px-5 py-4 space-y-5"
+                className="relative z-10 flex-1 overflow-y-auto no-scrollbar overscroll-contain touch-pan-y px-4 sm:px-5 py-4 space-y-5"
               >
                 {/* Primary CTA + Live Cart Strip */}
                 <div className="grid grid-cols-2 gap-2">
                   <Link
                     href="/menu"
                     onClick={closeDrawer}
-                    className="rounded-full bg-[#FF6A00] hover:bg-[#FFC145] text-white hover:text-[#071D3B] py-2.5 px-3.5 text-xs font-black text-center transition shadow-[0_10px_24px_-8px_rgba(255,106,0,0.55)] whitespace-nowrap"
+                    className="rounded-full bg-[#FF6A00] hover:bg-[#CE2F08] text-white py-2.5 px-3.5 text-xs font-black text-center transition-colors shadow-[0_8px_20px_-6px_rgba(255,106,0,0.45)] whitespace-nowrap"
                   >
                     اطلب من المنيو
                   </Link>
                   <Link
                     href="/cart"
                     onClick={closeDrawer}
-                    className="rounded-full bg-white/[0.07] hover:bg-white text-[#FFF5E8] hover:text-[#071D3B] border border-white/12 py-2.5 px-3.5 text-xs font-black inline-flex items-center justify-center gap-1.5 transition whitespace-nowrap"
+                    className="rounded-full bg-[#FFF5E8] hover:bg-[#0B2D5C] text-[#0B2D5C] hover:text-white border border-[#0B2D5C]/12 py-2.5 px-3.5 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-colors whitespace-nowrap group"
                   >
-                    <CartIcon className="w-3.5 h-3.5 text-[#FFC145]" />
+                    <CartIcon className="w-3.5 h-3.5 text-[#FF6A00] group-hover:text-[#FFC145]" />
                     <span>
                       {count > 0 ? `السلة (${count})` : "سلة الطلبات"}
                     </span>
@@ -390,10 +385,10 @@ export default function Header() {
                         key={item.href}
                         href={item.href}
                         onClick={closeDrawer}
-                        className={`group flex items-center justify-between gap-3 rounded-2xl px-3.5 py-2.5 transition-all duration-200 ${
+                        className={`group flex items-center justify-between gap-3 rounded-2xl px-3.5 py-2.5 border transition-colors duration-200 ${
                           active
-                            ? "bg-[#FF6A00] text-white shadow-[0_10px_24px_-10px_rgba(255,106,0,0.6)]"
-                            : "hover:bg-white/[0.06] text-[#FFF5E8]"
+                            ? "bg-[#FF6A00] border-[#FF6A00] text-white shadow-[0_8px_20px_-8px_rgba(255,106,0,0.45)]"
+                            : "bg-transparent hover:bg-[#FFF5E8] border-transparent hover:border-[#0B2D5C]/10 text-[#0B2D5C]"
                         }`}
                       >
                         <div className="min-w-0 text-right">
@@ -401,8 +396,8 @@ export default function Header() {
                             {item.label}
                           </div>
                           <div
-                            className={`text-[11px] font-medium truncate mt-0.5 ${
-                              active ? "text-white/85" : "text-[#FFF5E8]/50 group-hover:text-[#FFF5E8]/75"
+                            className={`text-[11px] font-semibold truncate mt-0.5 ${
+                              active ? "text-white/90" : "text-[#071D3B]/55 group-hover:text-[#0B2D5C]/80"
                             }`}
                           >
                             {item.sub}
@@ -411,8 +406,8 @@ export default function Header() {
 
                         <span
                           dir="ltr"
-                          className={`font-en text-[11px] font-bold tracking-wider shrink-0 ${
-                            active ? "text-white/90" : "text-[#FFC145]/60 group-hover:text-[#FFC145]"
+                          className={`font-en text-[11px] font-extrabold tracking-wider shrink-0 ${
+                            active ? "text-white/90" : "text-[#FF6A00]/70 group-hover:text-[#FF6A00]"
                           }`}
                         >
                           0{i + 1}
@@ -423,9 +418,9 @@ export default function Header() {
                 </nav>
 
                 {/* Quick Menu Chapters Grid */}
-                <div className="pt-3 border-t border-white/10">
+                <div className="pt-3.5 border-t border-[#0B2D5C]/10">
                   <div className="flex items-center justify-between mb-2.5 px-1">
-                    <span className="text-[11px] font-extrabold text-[#FFC145] tracking-wide">
+                    <span className="text-[11px] font-black text-[#0B2D5C]/70 tracking-wide">
                       أقسام المنيو السريعة
                     </span>
                     <button
@@ -434,9 +429,9 @@ export default function Header() {
                         closeDrawer();
                         setQrOpen(true);
                       }}
-                      className="inline-flex items-center gap-1 text-[11px] font-bold text-[#FFF5E8]/70 hover:text-white transition cursor-pointer"
+                      className="inline-flex items-center gap-1 text-[11px] font-extrabold text-[#FF6A00] hover:text-[#0B2D5C] transition-colors cursor-pointer"
                     >
-                      <QrCodeIcon className="w-3.5 h-3.5 text-[#FF6A00]" />
+                      <QrCodeIcon className="w-3.5 h-3.5" />
                       <span>باركود QR</span>
                     </button>
                   </div>
@@ -447,7 +442,7 @@ export default function Header() {
                         key={cat.href}
                         href={cat.href}
                         onClick={closeDrawer}
-                        className="rounded-xl bg-white/[0.05] hover:bg-[#FF6A00] border border-white/[0.08] hover:border-[#FF6A00] px-3 py-2 text-xs font-bold text-[#FFF5E8]/90 hover:text-white text-right truncate transition-colors duration-200"
+                        className="rounded-xl bg-[#FFF5E8]/80 hover:bg-[#FF6A00] border border-[#0B2D5C]/10 hover:border-[#FF6A00] px-3 py-2 text-xs font-extrabold text-[#0B2D5C] hover:text-white text-right truncate transition-colors duration-200"
                       >
                         {cat.label}
                       </Link>
@@ -460,29 +455,29 @@ export default function Header() {
                   <button
                     type="button"
                     onClick={handleInstallClick}
-                    className="w-full rounded-2xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 px-3.5 py-2.5 flex items-center justify-between gap-3 transition cursor-pointer text-right"
+                    className="w-full rounded-2xl bg-[#FFF5E8] hover:bg-[#FFC145]/35 border border-[#0B2D5C]/12 px-3.5 py-2.5 flex items-center justify-between gap-3 transition-colors cursor-pointer text-right"
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
-                      <DownloadAppIcon className="w-4 h-4 text-[#FFC145] shrink-0" />
-                      <span className="text-xs font-bold text-[#FFF5E8]/90 truncate">
+                      <DownloadAppIcon className="w-4 h-4 text-[#FF6A00] shrink-0" />
+                      <span className="text-xs font-extrabold text-[#0B2D5C] truncate">
                         تثبيت تطبيق جيمي كوك على جهازك
                       </span>
                     </div>
-                    <span className="shrink-0 rounded-full bg-white/12 px-2.5 py-0.5 text-[10px] font-extrabold text-[#FFC145]">
+                    <span className="shrink-0 rounded-full bg-[#0B2D5C] px-2.5 py-0.5 text-[10px] font-extrabold text-white">
                       تثبيت
                     </span>
                   </button>
                 )}
               </div>
 
-              {/* 3. Sleek Bottom Concierge & Social Dock */}
-              <div className="relative z-10 shrink-0 px-4 sm:px-5 py-3.5 bg-[#05152D] border-t border-white/10 space-y-2.5">
+              {/* 3. Sleek Light-Mode Bottom Concierge & Social Dock */}
+              <div className="relative z-10 shrink-0 px-4 sm:px-5 py-3.5 bg-[#FFF5E8] border-t border-[#0B2D5C]/10 space-y-2.5">
                 <div className="grid grid-cols-2 gap-2" dir="ltr">
                   <a
                     href="tel:01020305074"
-                    className="rounded-xl bg-white/[0.07] hover:bg-[#FF6A00] text-white border border-white/10 py-2 px-2.5 text-xs font-en font-extrabold inline-flex items-center justify-center gap-1.5 transition"
+                    className="rounded-xl bg-white hover:bg-[#0B2D5C] text-[#0B2D5C] hover:text-white border border-[#0B2D5C]/14 py-2 px-2.5 text-xs font-en font-extrabold inline-flex items-center justify-center gap-1.5 transition-colors group"
                   >
-                    <PhoneIcon className="w-3.5 h-3.5 text-[#FFC145]" />
+                    <PhoneIcon className="w-3.5 h-3.5 text-[#FF6A00] group-hover:text-[#FFC145]" />
                     <span>01020305074</span>
                   </a>
                   <a
@@ -490,7 +485,7 @@ export default function Header() {
                     target="_blank"
                     rel="noopener noreferrer"
                     dir="rtl"
-                    className="rounded-xl bg-[#FF6A00]/18 hover:bg-[#FF6A00] text-[#FFC145] hover:text-white border border-[#FF6A00]/35 py-2 px-2.5 text-xs font-extrabold inline-flex items-center justify-center gap-1.5 transition"
+                    className="rounded-xl bg-[#FF6A00] hover:bg-[#CE2F08] text-white py-2 px-2.5 text-xs font-extrabold inline-flex items-center justify-center gap-1.5 transition-colors shadow-2xs"
                   >
                     <WhatsAppIcon className="w-3.5 h-3.5 shrink-0" />
                     <span>واتساب 24س</span>
@@ -498,7 +493,7 @@ export default function Header() {
                 </div>
 
                 <div className="flex items-center justify-between pt-0.5">
-                  <span className="font-en text-[10px] font-bold tracking-widest text-[#FFF5E8]/45">
+                  <span className="font-en text-[10px] font-extrabold tracking-widest text-[#0B2D5C]/55">
                     GOOD FOOD • GOOD MOOD
                   </span>
                   <div className="flex items-center gap-1.5">
@@ -512,7 +507,7 @@ export default function Header() {
                           rel={item.href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
                           aria-label={item.label}
                           title={item.label}
-                          className="w-8 h-8 rounded-full bg-white/[0.06] hover:bg-[#FF6A00] text-[#FFF5E8]/80 hover:text-white grid place-items-center transition"
+                          className="w-8 h-8 rounded-full bg-white hover:bg-[#0B2D5C] text-[#0B2D5C] hover:text-white border border-[#0B2D5C]/12 grid place-items-center transition-colors"
                         >
                           <Icon className="w-3.5 h-3.5" />
                         </a>
@@ -526,7 +521,7 @@ export default function Header() {
           document.body,
         )}
 
-      {/* Manual PWA Install Guide Modal (iOS / Desktop Fallback) */}
+      {/* Manual PWA Install Guide Modal (Light Mode) */}
       {showInstallGuide &&
         typeof document !== "undefined" &&
         createPortal(
@@ -537,46 +532,46 @@ export default function Header() {
             aria-label="تثبيت تطبيق جيمي كوك"
           >
             <div
-              className="absolute inset-0 bg-[#041024]/70 backdrop-blur-sm touch-none"
+              className="absolute inset-0 bg-[#0B2D5C]/35 backdrop-blur-[2px] touch-none"
               onClick={() => setShowInstallGuide(false)}
             />
             <div
               dir="rtl"
-              className="relative z-10 w-full sm:max-w-sm rounded-t-[28px] sm:rounded-[28px] bg-[#071D3B] text-[#FFF5E8] border border-white/15 p-5 shadow-2xl space-y-4"
+              className="relative z-10 w-full sm:max-w-sm rounded-t-[28px] sm:rounded-[28px] bg-white text-[#071D3B] border border-[#0B2D5C]/15 p-5 shadow-2xl space-y-4"
             >
               <div className="flex items-center justify-between">
-                <h3 className="font-black text-base text-white">
+                <h3 className="font-black text-base text-[#0B2D5C]">
                   تثبيت تطبيق GIMMY COOK
                 </h3>
                 <button
                   type="button"
                   onClick={() => setShowInstallGuide(false)}
-                  className="w-8 h-8 rounded-full bg-white/10 hover:bg-[#FF6A00] text-white grid place-items-center cursor-pointer transition"
+                  className="w-8 h-8 rounded-full bg-[#FFF5E8] hover:bg-[#FF6A00] text-[#0B2D5C] hover:text-white grid place-items-center cursor-pointer transition-colors"
                   aria-label="إغلاق"
                 >
                   <CloseIcon className="w-4 h-4" />
                 </button>
               </div>
               {isIosDevice ? (
-                <div className="space-y-2.5 text-xs font-bold text-[#FFF5E8]/85 leading-relaxed">
+                <div className="space-y-2.5 text-xs font-bold text-[#071D3B]/80 leading-relaxed">
                   <p className="flex items-center gap-2">
-                    <ShareIosIcon className="w-4 h-4 text-[#FFC145] shrink-0" />
+                    <ShareIosIcon className="w-4 h-4 text-[#FF6A00] shrink-0" />
                     <span>١. اضغط على زر المشاركة (Share) في متصفح Safari بالأسفل.</span>
                   </p>
                   <p className="flex items-center gap-2">
-                    <CheckIcon className="w-4 h-4 text-[#FFC145] shrink-0" />
+                    <CheckIcon className="w-4 h-4 text-[#FF6A00] shrink-0" />
                     <span>٢. اختر «إضافة إلى الشاشة الرئيسية» (Add to Home Screen).</span>
                   </p>
                 </div>
               ) : (
-                <p className="text-xs font-bold text-[#FFF5E8]/85 leading-relaxed">
+                <p className="text-xs font-bold text-[#071D3B]/80 leading-relaxed">
                   من قائمة المتصفح العلوية (⋮)، اختر «تثبيت التطبيق» أو «الإضافة إلى الشاشة الرئيسية» لفتح منيو جيمي كوك بسرعة في أي وقت.
                 </p>
               )}
               <button
                 type="button"
                 onClick={() => setShowInstallGuide(false)}
-                className="w-full rounded-full bg-[#FF6A00] hover:bg-[#FFC145] text-white hover:text-[#071D3B] py-2.5 text-xs font-black transition cursor-pointer"
+                className="w-full rounded-full bg-[#FF6A00] hover:bg-[#CE2F08] text-white py-2.5 text-xs font-black transition-colors cursor-pointer"
               >
                 حسناً، فهمت
               </button>

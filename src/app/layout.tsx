@@ -1,15 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
-import { Alexandria, Poppins, Tajawal } from "next/font/google";
+import { Poppins, Tajawal } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
-
-const alexandria = Alexandria({
-  variable: "--font-alexandria",
-  subsets: ["arabic", "latin"],
-  weight: ["700", "800", "900"],
-});
 
 const tajawal = Tajawal({
   variable: "--font-tajawal",
@@ -26,7 +20,7 @@ const poppins = Poppins({
 const siteUrl = "https://gimmycook.chameleon.vision";
 const siteTitle = "مطعم جيمي كوك | GIMMY COOK — إيطالي وشرقي بمود مختلف • دليفري 24 ساعة";
 const siteDescription =
-  "مطعم جيمي كوك (GIMMY COOK) في القاهرة الجديدة — أكل إيطالي وشرقي بمود مختلف: بيتزا، فطير شرقي وحادق، مكرونة، طواجن فرن، وجبات، ومشويات بدليفري 24 ساعة وبرنامج مكافآت GIMMY POINTS (01020305074).";
+  "مطعم جيمي كوك (GIMMY COOK) في القاهرة الجديدة — أكل إيطالي وشرقي بمود مختلف: بيتزا، فطير شرقي وحادق، مكرونة، طواجن فرن، وجبات، ومشويات بدليفري 24 ساعة (01020305074).";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -45,7 +39,6 @@ export const metadata: Metadata = {
     "فطير شرقي التجمع",
     "دليفري 24 ساعة القاهرة الجديدة",
     "منيو جيمي كوك",
-    "GIMMY POINTS",
   ],
   alternates: {
     canonical: "/",
@@ -134,7 +127,7 @@ export default function RootLayout({
     <html
       lang="ar"
       dir="rtl"
-      className={`${alexandria.variable} ${tajawal.variable} ${poppins.variable}`}
+      className={`${tajawal.variable} ${poppins.variable}`}
     >
       <head>
         <Script id="pwa-init" strategy="beforeInteractive">

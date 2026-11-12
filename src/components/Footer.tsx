@@ -7,12 +7,12 @@ import {
   ChevronDownIcon,
   ExternalLinkIcon,
   FacebookIcon,
-  GiftPointsIcon,
   InstagramIcon,
   MailIcon,
   PhoneIcon,
   PinIcon,
   QrCodeIcon,
+  TagIcon,
   TikTokIcon,
   WhatsAppIcon,
 } from "./icons";
@@ -31,7 +31,7 @@ const MENU_LINKS = [
 const DISCOVER_LINKS = [
   { href: "/", label: "الصفحة الرئيسية" },
   { href: "/offers", label: "العروض الخاصة" },
-  { href: "/points", label: "نقاط GIMMY POINTS" },
+  { href: "/about", label: "قصة جيمي كوك" },
   { href: "/delivery", label: "مناطق التوصيل 24 ساعة" },
   { href: "/occasions", label: "العزومات والشركات" },
   { href: "/contact", label: "تواصل معنا" },
@@ -119,11 +119,11 @@ export default function Footer({ data }: { data: PublicData }) {
                 </button>
 
                 <Link
-                  href="/points"
+                  href="/offers"
                   className="rounded-full bg-[#FFC145] hover:bg-[#FF6A00] text-[#0B2D5C] hover:text-white px-3 sm:px-4 py-2.5 text-xs font-black inline-flex items-center justify-center gap-1.5 transition whitespace-nowrap"
                 >
-                  <GiftPointsIcon className="w-3.5 h-3.5 shrink-0" />
-                  <span>نقاط جيمي</span>
+                  <TagIcon className="w-3.5 h-3.5 shrink-0" />
+                  <span>العروض</span>
                 </Link>
               </div>
             </div>
@@ -261,7 +261,7 @@ export default function Footer({ data }: { data: PublicData }) {
                   <span>إيطالي وشرقي بمود مختلف • دليفري 24 ساعة</span>
                 </div>
                 <p className="text-sm font-bold text-[#071D3B]/78 leading-relaxed">
-                  في <strong className="text-[#0B2D5C]">مطعم جيمي كوك (GIMMY COOK)</strong> بنجمع بين البيتزا والمكرونة الإيطالية والفطير الشرقي والطواجن والمشويات، مع توصيل مستمر 24 ساعة وبرنامج ولاء <strong className="text-[#FF6A00]">GIMMY POINTS</strong>.
+                  في <strong className="text-[#0B2D5C]">مطعم جيمي كوك (GIMMY COOK)</strong> بنجمع بين البيتزا والمكرونة الإيطالية والفطير الشرقي والطواجن والمشويات، بتحضير طازج وتوصيل ساخن مستمر 24 ساعة.
                 </p>
                 <div className="pt-1 flex items-center gap-2">
                   <Link
@@ -383,7 +383,7 @@ export default function Footer({ data }: { data: PublicData }) {
               >
                 GOOD FOOD • GOOD MOOD
               </span>
-              <div className="w-full font-display text-[8.6vw] sm:text-[7.5vw] lg:text-[88px] font-black leading-[1.22] tracking-tight text-[#0B2D5C] text-center whitespace-nowrap">
+              <div className="w-full font-display text-[8.6vw] sm:text-[7.5vw] lg:text-[84px] font-black leading-[1.32] tracking-normal text-[#0B2D5C] text-center whitespace-nowrap">
                 مطعم <span className="text-[#FF6A00]">جيمي كوك</span>
               </div>
             </div>

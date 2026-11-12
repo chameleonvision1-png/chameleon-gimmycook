@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "مطعم جيمي كوك | GIMMY COOK — إيطالي وشرقي بمود مختلف",
     short_name: "GIMMY COOK",
     description:
-      "مطعم جيمي كوك (GIMMY COOK) في القاهرة الجديدة — بيتزا، فطير شرقي وحادق، مكرونة، طواجن فرن، وجبات، ومشويات بدليفري 24 ساعة وبرنامج مكافآت GIMMY POINTS.",
+      "مطعم جيمي كوك (GIMMY COOK) في القاهرة الجديدة — بيتزا، فطير شرقي وحادق، مكرونة، طواجن فرن، وجبات، ومشويات بدليفري 24 ساعة.",
     start_url: "/",
     display: "standalone",
     background_color: "#FFF5E8",

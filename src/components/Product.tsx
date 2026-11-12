@@ -57,7 +57,7 @@ export function ProductCard({
               openModal();
             }
           }}
-          className={`group relative w-full max-w-full min-w-0 overflow-hidden bg-white rounded-[24px] p-3.5 sm:p-4 border border-[#0B2D5C]/12 hover:border-[#FF6A00] shadow-[0_6px_18px_-10px_rgba(11,45,92,0.1)] hover:shadow-[0_16px_32px_-12px_rgba(255,106,0,0.22)] transition-all duration-200 flex items-center gap-3.5 text-start ${
+          className={`group relative w-full max-w-full min-w-0 overflow-hidden bg-white rounded-[24px] p-3.5 sm:p-4 border border-[#0B2D5C]/12 hover:border-[#FF6A00] shadow-[0_6px_18px_-10px_rgba(11,45,92,0.1)] hover:shadow-[0_16px_32px_-12px_rgba(255,106,0,0.22)] transition-[border-color,box-shadow] duration-200 flex items-center gap-3.5 text-start ${
             off ? "opacity-60 cursor-not-allowed" : "cursor-pointer"
           }`}
         >
@@ -108,7 +108,9 @@ export function ProductCard({
             <img
               src={product.image}
               alt={product.nameAr}
-              className="w-full h-full object-cover transition duration-500 group-hover:scale-108"
+              loading="lazy"
+              decoding="async"
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-108"
             />
             {off ? (
               <div className="absolute inset-0 grid place-items-center bg-[#071D3B]/65 backdrop-blur-[1px]">
@@ -146,7 +148,7 @@ export function ProductCard({
             openModal();
           }
         }}
-        className={`group relative rounded-[26px] bg-white border border-[#0B2D5C]/12 hover:border-[#FF6A00] p-3.5 flex flex-col justify-between shadow-[0_10px_26px_-14px_rgba(11,45,92,0.1)] hover:shadow-[0_18px_36px_-14px_rgba(255,106,0,0.22)] transition-all duration-200 text-start h-full ${
+        className={`group relative rounded-[26px] bg-white border border-[#0B2D5C]/12 hover:border-[#FF6A00] p-3.5 flex flex-col justify-between shadow-[0_10px_26px_-14px_rgba(11,45,92,0.1)] hover:shadow-[0_18px_36px_-14px_rgba(255,106,0,0.22)] transition-[border-color,box-shadow] duration-200 text-start h-full ${
           off ? "opacity-60 cursor-not-allowed" : "cursor-pointer"
         }`}
       >
@@ -169,7 +171,8 @@ export function ProductCard({
           <img
             src={product.image}
             alt={product.nameAr}
-            className="w-full h-full object-cover transition duration-500 group-hover:scale-106"
+            decoding="async"
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-106"
           />
         </div>
 

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { publicDB } from "@/lib/db";
 import OfferCard from "@/components/OfferCard";
-import { GiftPointsIcon } from "@/components/icons";
+import { Truck24Icon } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "عروض وبوكسات التوفير | مطعم جيمي كوك GIMMY COOK",
@@ -29,7 +29,7 @@ export default async function OffersPage() {
             عروض وبوكسات المود من جيمي كوك
           </h1>
           <p className="mt-2 text-xs sm:text-base text-[#FFF5E8]/88 font-semibold max-w-2xl leading-relaxed">
-            اختار الكومبو المناسب ليك ولأصحابك وعيلتك من البيتزا الإيطالية، الفطير الشرقي، الباستا والطواجن، والمشويات — متاحة 24 ساعة وتكسبك نقاط GIMMY POINTS.
+            اختار الكومبو المناسب ليك ولأصحابك وعيلتك من البيتزا الإيطالية، الفطير الشرقي، الباستا والطواجن، والمشويات — متاحة للتوصيل السريع 24 ساعة.
           </p>
         </div>
 
@@ -48,26 +48,26 @@ export default async function OffersPage() {
         ))}
       </div>
 
-      {/* Loyalty + Catering Dual Callout */}
+      {/* 24/7 Delivery + Catering Dual Callout */}
       <div className="grid md:grid-cols-2 gap-5">
         <div className="rounded-[28px] bg-[#0B2D5C] text-white p-6 sm:p-7 flex flex-col justify-between gap-4">
           <div>
             <span className="inline-flex items-center gap-1.5 rounded-full bg-[#FFC145] text-[#071D3B] px-3 py-0.5 text-xs font-black mb-2">
-              <GiftPointsIcon className="w-3.5 h-3.5" />
-              <span>GIMMY POINTS</span>
+              <Truck24Icon className="w-3.5 h-3.5" />
+              <span>دليفري 24 ساعة</span>
             </span>
             <h2 className="text-lg sm:text-2xl font-black text-white">
-              كل العروض بتكسبك نقاط مكافآت فورية
+              كل العروض متاحة للتوصيل الساخن طوال اليوم
             </h2>
             <p className="text-xs sm:text-sm font-semibold text-white/80 mt-1 leading-relaxed">
-              كل 100 جنيه = 5 نقاط، وكل 5 نقاط = 5 جنيه رصيد مكافآت تقدر تخصمه على طلباتك الجاية.
+              نغطي القاهرة الجديدة، التجمع، مدينتي، الشروق، مدينة بدر، العاصمة الإدارية، ووصال بتغليف حراري محكم.
             </p>
           </div>
           <Link
-            href="/points"
+            href="/delivery"
             className="self-start rounded-full bg-[#FFC145] hover:bg-white text-[#071D3B] font-black text-xs sm:text-sm px-5 py-2.5 transition"
           >
-            اعرف تفاصيل النقاط
+            استكشف مناطق التوصيل
           </Link>
         </div>
 

@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { readDB, uid, updateDB } from "@/lib/db";
 import { isAdmin } from "@/lib/auth";
-import { calcGimmyPoints } from "@/lib/format";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 import { orderWhatsAppText, waLink } from "@/lib/whatsapp";
 import type { Order, OrderItem } from "@/lib/types";
@@ -134,7 +133,6 @@ export async function POST(req: Request) {
 
   const subtotal = out.reduce((s, l) => s + l.unitPrice * l.qty, 0);
   const deliveryFee = orderType === "delivery" ? Math.max(0, Number(branch.deliveryFee) || 0) : 0;
-  const earnedPoints = calcGimmyPoints(subtotal);
 
   const order = await updateDB((d) => {
     const seq =
@@ -153,7 +151,6 @@ export async function POST(req: Request) {
       subtotal,
       deliveryFee,
       total: subtotal + deliveryFee,
-      earnedPoints,
       status: "new",
       createdAt: new Date().toISOString(),
     };

@@ -1,12 +1,5 @@
 export const formatPrice = (n: number) => `${n.toLocaleString("ar-EG")} ج.م`;
 
-/**
- * GIMMY POINTS Loyalty Formula:
- * Every 100 EGP = 5 Points, and 5 Points = 5 EGP reward credit.
- */
-export const calcGimmyPoints = (subtotal: number): number =>
-  Math.max(0, Math.floor(subtotal / 100) * 5);
-
 export const statusLabels: Record<string, string> = {
   new: "جديد",
   preparing: "جاري التحضير",

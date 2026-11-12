@@ -42,7 +42,7 @@
   --color-ink: #071D3B;
   --color-cocoa: #071D3B;
   --font-sans: var(--font-tajawal), system-ui, sans-serif;
-  --font-display: var(--font-alexandria), var(--font-tajawal), system-ui, sans-serif;
+  --font-display: var(--font-tajawal), system-ui, sans-serif;
   --font-en: var(--font-poppins), var(--font-tajawal), system-ui, sans-serif;
 }
 
@@ -76,10 +76,14 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-h1,
-h2,
-.font-display {
-  font-family: var(--font-alexandria), var(--font-tajawal), system-ui, sans-serif;
+@layer base {
+  h1,
+  h2,
+  h3,
+  .font-display {
+    font-family: var(--font-tajawal), system-ui, sans-serif;
+    line-height: 1.45;
+  }
 }
 
 .font-en {

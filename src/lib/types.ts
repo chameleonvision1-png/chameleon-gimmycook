@@ -122,7 +122,6 @@ export interface Order {
   subtotal: number;
   deliveryFee: number;
   total: number;
-  earnedPoints?: number;
   status: OrderStatus;
   createdAt: string;
 }

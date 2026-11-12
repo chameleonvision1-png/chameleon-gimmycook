@@ -3,7 +3,7 @@ import Link from "next/link";
 import { publicDB } from "@/lib/db";
 import MenuClient from "@/components/MenuClient";
 import OpenQrButton from "@/components/OpenQrButton";
-import { GiftPointsIcon, PhoneIcon } from "@/components/icons";
+import { PhoneIcon, TagIcon } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "منيو مطعم جيمي كوك — GIMMY COOK | بيتزا وفطير ومكرونة وطواجن",
@@ -39,11 +39,11 @@ export default async function MenuPage(props: PageProps<"/menu">) {
               />
 
               <div>
-                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black leading-[1.35]">
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black leading-[1.42]">
                   منيو مطعم جيمي كوك التفاعلي
                 </h1>
                 <p className="mt-1.5 text-xs sm:text-sm font-bold text-[#FFF5E8]/88 max-w-xl leading-relaxed">
-                  ٨ أقسام تجمع الإيطالي والشرقي — اختار الحجم والإضافات واكسب نقاط مكافآت GIMMY POINTS مع توصيل 24 ساعة.
+                  ٨ أقسام تجمع الإيطالي والشرقي — اختار الحجم والإضافات المفضلة واطلب مباشرة مع خدمة توصيل 24 ساعة.
                 </p>
               </div>
             </div>
@@ -52,11 +52,11 @@ export default async function MenuPage(props: PageProps<"/menu">) {
             <div className="grid grid-cols-3 sm:flex sm:flex-wrap items-center justify-center gap-2 w-full sm:w-auto shrink-0">
               <OpenQrButton label="باركود QR" />
               <Link
-                href="/points"
+                href="/offers"
                 className="inline-flex items-center justify-center gap-1.5 rounded-full bg-white/15 hover:bg-[#FF6A00] text-white border border-white/25 font-black text-xs sm:text-sm px-3.5 py-2.5 sm:px-4 sm:py-3 transition whitespace-nowrap"
               >
-                <GiftPointsIcon className="w-4 h-4 shrink-0 text-[#FFC145]" />
-                <span>نقاط جيمي</span>
+                <TagIcon className="w-4 h-4 shrink-0 text-[#FFC145]" />
+                <span>العروض</span>
               </Link>
               <a
                 href="tel:01020305074"

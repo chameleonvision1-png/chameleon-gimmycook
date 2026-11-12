@@ -140,16 +140,35 @@ export async function publicDB() {
   const now = Date.now();
   return {
     settings,
-    branches: db.branches.filter((b) => b.isActive),
+    branches: db.branches
+      .filter((b) => b.isActive)
+      .map((b) => ({
+        ...b,
+        services: b.services.map((s) =>
+          s.includes("POINTS") ? "تغليف حراري يحفظ السخونة" : s,
+        ),
+      })),
     categories: [...db.categories].sort((a, b) => a.sortOrder - b.sortOrder),
     products: db.products,
-    offers: db.offers.filter(
-      (o) =>
-        o.isActive &&
-        new Date(o.startsAt).getTime() <= now &&
-        new Date(o.endsAt).getTime() >= now,
-    ),
-    reviews: db.reviews,
+    offers: db.offers
+      .filter(
+        (o) =>
+          o.isActive &&
+          new Date(o.startsAt).getTime() <= now &&
+          new Date(o.endsAt).getTime() >= now,
+      )
+      .map((o) => ({
+        ...o,
+        terms: o.terms.includes("POINTS") || o.terms.includes("رصيد مكافآت")
+          ? "متاح دليفري 24 ساعة وتيك أواي في جميع مناطق التغطية"
+          : o.terms,
+      })),
+    reviews: db.reviews.map((r) => ({
+      ...r,
+      text: r.text.includes("POINTS")
+        ? "صينية المشويات مع الفطير المشكل شرفونا في عزومة العيلة، والأكل وصل سخن وفي معاده بالثانية."
+        : r.text,
+    })),
   };
 }
 

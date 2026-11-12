@@ -4,10 +4,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useStore } from "./store";
-import { calcGimmyPoints, formatPrice, paymentMethods } from "@/lib/format";
+import { formatPrice, paymentMethods } from "@/lib/format";
 import {
   CheckIcon,
-  GiftPointsIcon,
   MinusIcon,
   PhoneIcon,
   PinIcon,
@@ -54,7 +53,7 @@ export default function CartClient() {
           سلة طلباتك فارغة حالياً
         </h2>
         <p className="text-[#071D3B]/68 mt-1.5 font-semibold leading-relaxed text-sm">
-          اختار من منيو جيمي كوك (البيتزا الإيطالية، الفطير الشرقي المورق، الباستا والطواجن، الوجبات والمشويات) واكسب نقاط مكافآت مع كل طلب.
+          اختار من منيو جيمي كوك (البيتزا الإيطالية، الفطير الشرقي المورق، الباستا والطواجن، الوجبات والمشويات) واطلب الآن بخدمة دليفري 24 ساعة.
         </p>
         <Link href="/menu" className="btn btn-primary mt-6">
           تصفح منيو جيمي كوك
@@ -65,7 +64,6 @@ export default function CartClient() {
 
   const deliveryFee = orderType === "delivery" ? (branch?.deliveryFee ?? 25) : 0;
   const total = subtotal + deliveryFee;
-  const earnedPoints = calcGimmyPoints(subtotal);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -312,7 +310,7 @@ export default function CartClient() {
 
         <div>
           <label className="label text-xs font-extrabold text-[#0B2D5C] mb-1 block" htmlFor="c-phone">
-            رقم الموبايل للتأكيد وحساب نقاط الولاء *
+            رقم الموبايل للتأكيد والمتابعة *
           </label>
           <input
             id="c-phone"
@@ -390,32 +388,9 @@ export default function CartClient() {
             id="c-notes"
             value={form.notes}
             onChange={(e) => setForm({ ...form, notes: e.target.value })}
-            placeholder="مثال: رن الجرس، استبدال رصيد نقاط، مناديل إضافية…"
+            placeholder="مثال: رن الجرس، صوص إضافي، مناديل إضافية…"
             className="input text-sm"
           />
-        </div>
-
-        {/* GIMMY POINTS Earned Banner */}
-        <div className="rounded-2xl bg-[#0B2D5C] text-white p-3.5 flex items-center justify-between gap-2.5">
-          <div className="flex items-center gap-2 min-w-0">
-            <span className="w-8 h-8 rounded-full bg-[#FFC145] text-[#071D3B] grid place-items-center shrink-0">
-              <GiftPointsIcon className="w-4 h-4" />
-            </span>
-            <div className="min-w-0">
-              <div className="text-xs font-black text-[#FFC145]">مكافأة GIMMY POINTS</div>
-              <div className="text-[11px] text-white/80 font-semibold truncate">
-                {earnedPoints > 0
-                  ? `ستكسب ${earnedPoints} نقطة = ${earnedPoints} ج.م رصيد مكافآت`
-                  : "أكمل طلبك إلى 100 ج.م لتربح 5 نقاط فورية"}
-              </div>
-            </div>
-          </div>
-          <Link
-            href="/points"
-            className="shrink-0 rounded-full bg-white/15 hover:bg-[#FF6A00] px-2.5 py-1 text-[10px] font-black text-white transition"
-          >
-            التفاصيل
-          </Link>
         </div>
 
         {/* Totals */}

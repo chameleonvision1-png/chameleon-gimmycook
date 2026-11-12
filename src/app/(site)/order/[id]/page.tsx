@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { readDB } from "@/lib/db";
-import { calcGimmyPoints, formatPrice } from "@/lib/format";
+import { formatPrice } from "@/lib/format";
 import { orderWhatsAppText, waLink } from "@/lib/whatsapp";
-import { CheckIcon, GiftPointsIcon, PhoneIcon, WhatsAppIcon } from "@/components/icons";
+import { CheckIcon, PhoneIcon, WhatsAppIcon } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "تم تسجيل طلبك | مطعم جيمي كوك GIMMY COOK",
@@ -18,7 +18,6 @@ export default async function OrderPage(props: PageProps<"/order/[id]">) {
   if (!order) notFound();
   const branch = db.branches.find((b) => b.id === order.branchId) ?? db.branches[0];
   const url = waLink(branch.whatsapp, orderWhatsAppText(order, branch));
-  const points = order.earnedPoints ?? calcGimmyPoints(order.subtotal);
 
   return (
     <div className="mx-auto max-w-xl px-4 py-12">
@@ -66,16 +65,6 @@ export default async function OrderPage(props: PageProps<"/order/[id]">) {
             </a>
           )}
         </div>
-
-        {/* Earned GIMMY POINTS Badge */}
-        {points > 0 && (
-          <div className="mt-5 rounded-2xl bg-[#0B2D5C] text-white p-3.5 flex items-center justify-center gap-2 text-xs sm:text-sm font-black">
-            <GiftPointsIcon className="w-4 h-4 text-[#FFC145] shrink-0" />
-            <span>
-              مبروك! أضفنا <span className="text-[#FFC145]">{points} نقطة</span> من GIMMY POINTS على هذا الطلب
-            </span>
-          </div>
-        )}
 
         <div className="text-start mt-6 border-t border-dashed border-[#0B2D5C]/20 pt-4 space-y-2 text-sm">
           {order.items.map((it, i) => (

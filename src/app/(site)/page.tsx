@@ -6,12 +6,12 @@ import FavouritesShowcase from "@/components/FavouritesShowcase";
 import ReviewsBannerCarousel from "@/components/ReviewsBannerCarousel";
 import OfferCard from "@/components/OfferCard";
 import BranchesShowcase from "@/components/BranchesShowcase";
-import { GiftPointsIcon, Truck24Icon } from "@/components/icons";
+import { PhoneIcon, TagIcon, Truck24Icon } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "مطعم جيمي كوك — GIMMY COOK | إيطالي وشرقي بمود مختلف • دليفري 24 ساعة",
   description:
-    "الموقع والمنيو الرسمي لمطعم جيمي كوك (GIMMY COOK) في القاهرة الجديدة: بيتزا إيطالية، فطير شرقي مورق، مكرونة، طواجن فرن، وجبات ومشاوي مع دليفري 24 ساعة وبرنامج نقاط GIMMY POINTS.",
+    "الموقع والمنيو الرسمي لمطعم جيمي كوك (GIMMY COOK) في القاهرة الجديدة: بيتزا إيطالية، فطير شرقي مورق، مكرونة، طواجن فرن، وجبات ومشاوي مع دليفري 24 ساعة.",
   openGraph: {
     images: ["/og-image.jpg?v=1"],
   },
@@ -32,10 +32,11 @@ export default async function HomePage() {
           <span className="inline-block rounded-full bg-[#0B2D5C]/10 text-[#0B2D5C] px-4 py-1 text-xs font-black font-en mb-3">
             ITALIAN & ORIENTAL FUSION • 24/7 DELIVERY
           </span>
-          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-[#0B2D5C] leading-[1.32] tracking-tight">
-            إيطالي وشرقي في مطبخ واحد. بمود يفتح النفس.
+          <h2 className="text-2xl sm:text-4xl lg:text-[44px] font-black text-[#0B2D5C] leading-[1.52] tracking-normal">
+            <span className="block">إيطالي وشرقي في مطبخ واحد.</span>
+            <span className="block text-[#FF6A00] mt-1">بمود يفتح النفس.</span>
           </h2>
-          <p className="mt-3.5 text-sm sm:text-base font-bold text-[#071D3B]/72 leading-relaxed">
+          <p className="mt-4 text-sm sm:text-base font-bold text-[#071D3B]/72 leading-relaxed">
             في <strong className="text-[#FF6A00]">مطعم جيمي كوك (GIMMY COOK)</strong> جمعنالك أحلى ما في المطبخين بدون حيرة: عجينة بيتزا إيطالية مخبوزة طازة وباستا وايت صوص كريمي، جنب الفطير الشرقي المورق بالسمن البلدي وطواجن الفرن والمشويات — مع توصيل شغال 24 ساعة لحد باب بيتك.
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
@@ -46,10 +47,10 @@ export default async function HomePage() {
               تصفح المنيو الكامل
             </Link>
             <Link
-              href="/points"
+              href="/offers"
               className="rounded-full bg-white hover:bg-[#0B2D5C] text-[#0B2D5C] hover:text-white border border-[#0B2D5C]/20 px-6 py-2.5 text-xs sm:text-sm font-black transition"
             >
-              اكسب نقاط GIMMY POINTS
+              عروض وبوكسات التوفير
             </Link>
           </div>
         </div>
@@ -126,7 +127,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 4. GIMMY POINTS + 24/7 DELIVERY BANNER STRIP */}
+      {/* 4. 24/7 NON-STOP HOT DELIVERY & COMBOS BANNER STRIP */}
       <section className="mx-auto max-w-7xl px-2.5 sm:px-6 lg:px-8 pt-3 sm:pt-5">
         <div className="relative rounded-[26px] sm:rounded-[36px] overflow-hidden bg-gradient-to-l from-[#0B2D5C] via-[#143A73] to-[#071D3B] text-white p-5 sm:p-8 lg:p-10 shadow-[0_18px_44px_-20px_rgba(11,45,92,0.55)] border border-[#FFC145]/25">
           <div
@@ -138,35 +139,37 @@ export default async function HomePage() {
             <div className="space-y-2 text-right max-w-2xl">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-[#FFC145] text-[#071D3B] px-3 py-1 text-xs font-black">
-                  <GiftPointsIcon className="w-3.5 h-3.5" />
-                  <span>برنامج ولاء GIMMY POINTS</span>
+                  <Truck24Icon className="w-3.5 h-3.5" />
+                  <span>دليفري مستمر 24 ساعة</span>
                 </span>
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-white/12 text-[#FFF5E8] px-3 py-1 text-xs font-extrabold border border-white/15">
-                  <Truck24Icon className="w-3.5 h-3.5 text-[#FF6A00]" />
-                  <span>دليفري 24 ساعة</span>
+                  <TagIcon className="w-3.5 h-3.5 text-[#FF6A00]" />
+                  <span>بوكسات وعروض التوفير</span>
                 </span>
               </div>
-              <h3 className="text-xl sm:text-3xl font-black text-white leading-snug">
-                كل 100 جنيه بتطلبها = 5 نقاط مكافآت فورية في رصيدك
+              <h3 className="text-xl sm:text-3xl font-black text-white leading-[1.45]">
+                الأكل يوصلك سخن وطازة في أي وقت — 24 ساعة بدون توقف
               </h3>
               <p className="text-xs sm:text-sm text-[#FFF5E8]/85 font-semibold leading-relaxed">
-                جمّع نقاطك مع كل أوردر من جيمي كوك واستبدل كل 5 نقاط بـ 5 جنيه خصم مباشر على طلباتك الجاية — متاح للتوصيل طوال 24 ساعة في القاهرة الجديدة ومدينتي والشروق وبدر والعاصمة.
+                سواء غدا العيلة أو سهرة آخر الليل — أسطول توصيل جيمي كوك يغطي القاهرة الجديدة ومدينتي والشروق ومدينة بدر والعاصمة الإدارية بتغليف حراري يحفظ قرمشة الفطير وسخونة البيتزا والطواجن.
               </p>
             </div>
 
             <div className="flex flex-wrap items-center gap-2.5 shrink-0">
               <Link
-                href="/points"
-                className="rounded-full bg-[#FF6A00] hover:bg-[#CE2F08] text-white px-5 py-3 text-xs sm:text-sm font-black transition shadow-md whitespace-nowrap"
-              >
-                احسب نقاطك الآن
-              </Link>
-              <Link
                 href="/delivery"
-                className="rounded-full bg-white/12 hover:bg-white text-white hover:text-[#0B2D5C] border border-white/25 px-5 py-3 text-xs sm:text-sm font-black transition whitespace-nowrap"
+                className="rounded-full bg-[#FF6A00] hover:bg-[#CE2F08] text-white px-5 py-3 text-xs sm:text-sm font-black transition shadow-md whitespace-nowrap"
               >
                 مناطق التوصيل 24 ساعة
               </Link>
+              <a
+                href="tel:01020305074"
+                dir="ltr"
+                className="rounded-full bg-white/12 hover:bg-white text-white hover:text-[#0B2D5C] border border-white/25 px-5 py-3 text-xs sm:text-sm font-en font-black inline-flex items-center gap-2 transition whitespace-nowrap"
+              >
+                <PhoneIcon className="w-3.5 h-3.5 text-[#FFC145]" />
+                <span>01020305074</span>
+              </a>
             </div>
           </div>
         </div>
@@ -187,7 +190,7 @@ export default async function HomePage() {
                 عروض وبوكسات جيمي كوك
               </h2>
               <p className="text-xs sm:text-sm font-bold text-[#071D3B]/65 mt-1">
-                كومبوهات تجمع الإيطالي والشرقي بسعر توفير ونقاط إضافية
+                كومبوهات تجمع الإيطالي والشرقي بسعر توفير خاص للعيلة والأصحاب
               </p>
             </div>
             <Link

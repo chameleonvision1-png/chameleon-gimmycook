@@ -1,8 +1,6 @@
-import { calcGimmyPoints } from "./format";
 import type { Branch, OccasionRequest, Order } from "./types";
 
 export function orderWhatsAppText(order: Order, branch: Branch) {
-  const points = order.earnedPoints ?? calcGimmyPoints(order.subtotal);
   const lines: string[] = [];
   lines.push(`*طلب جديد — مطعم جيمي كوك | GIMMY COOK*`);
   lines.push(`رقم الطلب: *${order.orderNumber}*`);
@@ -37,9 +35,6 @@ export function orderWhatsAppText(order: Order, branch: Branch) {
     lines.push(`خدمة التوصيل: ${order.deliveryFee} ج.م`);
   }
   lines.push(`*إجمالي الطلب: ${order.total} ج.م*`);
-  if (points > 0) {
-    lines.push(`نقاط GIMMY POINTS المكتسبة: *${points} نقطة* (${points} ج.م رصيد مكافآت)`);
-  }
   if (order.notes) {
     lines.push("");
     lines.push(`ملاحظات إضافية: ${order.notes}`);
